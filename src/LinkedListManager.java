@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class LinkedListManager {
 
-    LinkedList<Flat> list;
+    private LinkedList<Flat> list;
 
     final public ZonedDateTime creationDate;
     /**
@@ -75,7 +75,6 @@ public class LinkedListManager {
         Flat object = new ObjectFiller().finnalizeObject();
         object.setId(Long.valueOf(list.size()));
         list.add(object);
-
     }
 
     /**
@@ -127,10 +126,8 @@ public class LinkedListManager {
                 String line = reader.readLine();
                 if (line == null)
                     break;
-                for (String command :
-                        Pattern.compile("[,;:\n]+").split(line)) {
-                    commands.add(command);
-                }
+                commands.add(line);
+
             }
             for (String command :
                     commands) {

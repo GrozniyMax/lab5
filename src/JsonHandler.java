@@ -16,6 +16,20 @@ import java.util.regex.Pattern;
 public final class JsonHandler {
     static String filePath;
 
+    private static class ManagerAdapter{
+        LinkedList<FlatParams> list;
+        public Date creationTime;
+
+        public ManagerAdapter(LinkedListManager manager) {
+            this.list = new LinkedList<>();
+            this.creationTime = Date.from(manager.creationDate.toInstant());
+            for (Flat f :
+                    manager.getList()) {
+                list.add(new FlatParams(f));
+            }
+        }
+    }
+
 
     /**
      * Класс для сохранения коллекции в JSON-файл
@@ -30,14 +44,23 @@ public final class JsonHandler {
         public View view; //Поле не может быть null
         public Transport transport; //Поле не может быть null
         public House house; //Поле не может быть null
+
+        public FlatParams(Flat copyFrom) {
+            this.name = copyFrom.getName();
+            this.creationDate = Date.from(copyFrom.getCreationDate().toInstant());
+            this.coordinates = copyFrom.getCoordinates();
+            this.transport=copyFrom.getTransport();
+            this.area = copyFrom.getArea();
+            this.numberOfRooms = copyFrom.getNumberOfRooms();
+            this.furnish = copyFrom.getFurnish();
+            this.view = copyFrom.getView();
+            this.house = copyFrom.getHouse();
+        }
     }
     /**
      * Класс для сохранения менеджера коллекции в JSON-файл
      */
-    private static class ManagerAdapter{
-        public Date creationDate;
-        public LinkedList<FlatParams> list;
-    }
+
 
     /**
      * Устанавливает путь к файлу
@@ -53,46 +76,27 @@ public final class JsonHandler {
      * @throws FileNotFoundException - если файл не найден
      */
     static void dump(LinkedListManager manager) throws FileNotFoundException {
-        LinkedList<FlatParams> collection = new LinkedList<>();
-        FlatParams transferObj;
-        try {
-            for (Flat object :
-                    manager.list) {
-                transferObj = new FlatParams();
-                for (Field f :
-                        object.getClass().getDeclaredFields()) {
-                    f.setAccessible(true);
-                    if (f.getName().equals("creationDate")){
-                            ZonedDateTime time = (ZonedDateTime) f.get(object);
-                            transferObj.creationDate = Date.from(time.toInstant());
-                    }
-                    else {
-                        FlatParams.class.getField(f.getName()).set(transferObj,f.get(object));
-                    }
-
-                }
-                collection.add(transferObj);
-            }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("Разраб даун. Не смог скастить типы");
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException("Разраб даун. Не смог скастить типы");
-        }
-        ManagerAdapter saveObj= new ManagerAdapter();
-        saveObj.creationDate = Date.from(manager.creationDate.toInstant());
-
-
+        ManagerAdapter managerAdapter = new ManagerAdapter(manager);
         OutputStreamWriter writer = null;
+        Gson g = new Gson();
+        String file = g.toJson(managerAdapter);
         try {
             writer = new OutputStreamWriter(new FileOutputStream(filePath),"utf-8");
-            writer.write(manager.creationDate.toString()+"\n");
-            writer.write(new Gson().toJson(collection));
+            writer.write(file);
+
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("Программист даун");
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException("Указаный файл не найден");
         } catch (IOException e) {
             throw new RuntimeException("Не получилось сохранить коллекцию в JSON-файл");
+        }
+        finally {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     /**
@@ -117,40 +121,32 @@ public final class JsonHandler {
         }
 
 
-//        final Type listType = new TypeToken<LinkedList<FlatParams>>() {}.getType();
+
         ManagerAdapter adapter= new Gson().fromJson(lines.toString(),ManagerAdapter.class);
-        LinkedList<FlatParams> parsed = adapter.list;
-        LinkedList<Flat> resultList = new LinkedList<>();
-        Flat finalObject;
-        try {
-            for (FlatParams transferringObject :
-                    parsed) {
-                finalObject = new Flat();
-                for (Field f :
-                        transferringObject.getClass().getDeclaredFields()) {
-
-                    Method setter = Flat.class.getMethod("set" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1));
-
-                    if (f.getName().equals("creationDate")) {
-                        Date value = Objects.requireNonNull((Date) f.get(transferringObject));
-                        finalObject.setCreationDate(ZonedDateTime.ofInstant(value.toInstant(), ZoneId.systemDefault()));
-                    } else {
-
-                        setter.invoke(finalObject, f.get(transferringObject));
-                    }
-
-                }
-                resultList.add(finalObject);
+        LinkedList<Flat> list = new LinkedList<>();
+        long currentId=0;
+        for (int i=0;i<adapter.list.size();i++) {
+            try {
+                FlatParams transferObject = adapter.list.get(i);
+                Flat f = new Flat();
+                f.setName(transferObject.name);
+                f.setCreationDate(ZonedDateTime.ofInstant(transferObject.creationDate.toInstant(),ZoneId.systemDefault()));
+                f.setCoordinates(transferObject.coordinates);
+                f.setArea(transferObject.area);
+                f.setNumberOfRooms(transferObject.numberOfRooms);
+                f.setView(transferObject.view);
+                f.setFurnish(transferObject.furnish);
+                f.setHouse(transferObject.house);
+                f.setTransport(transferObject.transport);
+                f.setId(currentId);
+                currentId++;
+                list.add(f);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("В процессе обработки файла возникла ошибка в объекте "+ i + ":" + e.getMessage());
             }
-            LinkedListManager result = new LinkedListManager(resultList,ZonedDateTime.ofInstant(adapter.creationDate.toInstant(),ZoneId.systemDefault()));
-            return result;
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("Разраб даун. Не смог скастить типы");
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
         }
+        return new LinkedListManager(list,ZonedDateTime.ofInstant(adapter.creationTime.toInstant(),ZoneId.systemDefault()));
+
 
     }
 

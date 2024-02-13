@@ -101,6 +101,29 @@ public class Flat implements Comparable<Flat>{
         return view;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public Integer getArea() {
+        return area;
+    }
+
+    public Long getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public Transport getTransport() {
+        return transport;
+    }
+
+    public House getHouse() {
+        return house;
+    }
 
     @Override
     public String toString() {

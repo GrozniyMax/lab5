@@ -21,11 +21,11 @@ public class Main {
     public static void main(String[] args) {
         //TODO Протестировать команды
         //TODO Написать JAVADOC
-        final String fileName = System.getenv("collectionFileName");
+        String fileName = System.getenv("collectionFileName");
         if (fileName == null)  {
             System.out.println("Нужно запускать файл с переменной окружения " +
-                    "'fileNameCollection' (названием файла, откуда брать коллекцию)!!!");
-
+                    "'fileNameCollection' (названием файла, откуда брать коллекцию)!!!\n Будет использован базовый(~/dumping.json)");
+            fileName = System.getProperty("user.dir") + "\\dumping.json";
         }
 
         JsonHandler.setFilePath(fileName);
@@ -41,6 +41,9 @@ public class Main {
         finally {
             runApp(new CommandHandler(manager));
         }
+
+
+
 
 
     }
