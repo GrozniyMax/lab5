@@ -20,7 +20,7 @@ public class Main {
      */
     public static void main(String[] args) {
         //TODO Протестировать команды
-        //TODO Написать JAVADOC
+
         String fileName = System.getenv("collectionFileName");
         if (fileName == null)  {
             System.out.println("Нужно запускать файл с переменной окружения " +

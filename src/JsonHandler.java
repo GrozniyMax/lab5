@@ -16,10 +16,17 @@ import java.util.regex.Pattern;
 public final class JsonHandler {
     static String filePath;
 
+
+    /**
+     * Класс для сохранения менеджера в JSON-файл
+     */
     private static class ManagerAdapter{
         LinkedList<FlatParams> list;
         public Date creationTime;
-
+        /**
+         * Конструктор для создания объекта из объекта класса LinkedListManager
+         * @param manager - объект класса LinkedListManager
+         */
         public ManagerAdapter(LinkedListManager manager) {
             this.list = new LinkedList<>();
             this.creationTime = Date.from(manager.creationDate.toInstant());
@@ -45,6 +52,11 @@ public final class JsonHandler {
         public Transport transport; //Поле не может быть null
         public House house; //Поле не может быть null
 
+
+        /**
+         * Конструктор для создания объекта из объекта класса Flat
+         * @param copyFrom - объект класса Flat
+         */
         public FlatParams(Flat copyFrom) {
             this.name = copyFrom.getName();
             this.creationDate = Date.from(copyFrom.getCreationDate().toInstant());
@@ -57,9 +69,6 @@ public final class JsonHandler {
             this.house = copyFrom.getHouse();
         }
     }
-    /**
-     * Класс для сохранения менеджера коллекции в JSON-файл
-     */
 
 
     /**
