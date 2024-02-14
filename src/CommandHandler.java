@@ -1,13 +1,50 @@
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+/**
+ * Обработчик команд
+ */
 public class CommandHandler {
 
     LinkedListManager linkedListManager;
+    static Map<Pattern, String> methods;
 
+    //Добавляем все методы в словарь
+    static {
+        methods = new HashMap<>();
+
+        //Добавляем все методы в словарь
+        methods.put(Pattern.compile("^\s*help\s*$"),"help");
+        methods.put(Pattern.compile("^\s*info\s*$"),"info");
+        methods.put(Pattern.compile("^\s*show\s*$"),"show");
+        methods.put(Pattern.compile("^\s*add\s*$"),"add");
+        methods.put(Pattern.compile("^\s*update\s+(\\d+)$"),"update");
+        methods.put(Pattern.compile("^\s*update\s+(\\d+)$"),"removeById");
+        methods.put(Pattern.compile("^\s*clear\s*$"),"clear");
+        methods.put(Pattern.compile("^\s*save\s*$"),"save");
+        methods.put(Pattern.compile("^\s*update\s+(.+)$"),"executeScript");
+        methods.put(Pattern.compile("^\s*exit\s*$"),"exit");
+        methods.put(Pattern.compile("^\s*remove_first\s*$"),"removeFirst");
+        methods.put(Pattern.compile("^\s*remove_lower\s+(.+)\s*$"),"remove_lower");
+        methods.put(Pattern.compile("^\s*remove_all_by_view\s+(.+)\s*$"),"remove_all_by_view");
+        methods.put(Pattern.compile("^\s*group_by_creation_date\s*$"),"group_by_creation_date");
+        methods.put(Pattern.compile("^\s*count_greater_than_furish\s+(.+)$"),"count_greater_than_furish");
+    }
+
+    /**
+     * Конструктор
+     * @param linkedListManager - менеджер коллекцией
+     */
     public CommandHandler(LinkedListManager linkedListManager) {
         this.linkedListManager = linkedListManager;
     }
+
 
     /**
      * Обработка команды
@@ -15,86 +52,40 @@ public class CommandHandler {
      * @return - true, если нужно завершить программу
      */
     public boolean handle(String line){
-        Command current = null;
-
-        for (Command c :
-                Command.values()) {
-            if (c.getPattern().matcher(line).matches()){
-                current = c;
+        String currentMethodName = null;
+        Pattern currentPattern = null;
+        for (Pattern command:
+             methods.keySet()) {
+            //write code that check does the line match the pattern
+            if (command.matcher(line).matches()){
+                currentPattern = command;
+                currentMethodName = methods.get(currentPattern);
                 break;
             }
         }
-        String argument = null;
-        if ((current== Command.UPDATE)||(current==Command.REMOVE_BY_ID)||(current==Command.EXECUTE_SCRIPT)||(current==Command.REMOVE_ALL_BY_VIEW)||(current==Command.COUNT_GREATER_THAN_FURISH)){
-
-            Matcher matcher = current.getPattern().matcher(line);
-            if (matcher.find()){
-                argument = matcher.group(1);
+        try {
+            currentPattern = Objects.requireNonNull(currentPattern,"Не получилось распознать команду");
+            if (currentMethodName.contains("exit")) return true;
+            Method currentMethod = LinkedListManager.class.getMethod(Objects.requireNonNull(currentMethodName,
+                                                            "Не получилось распознать команду"));
+            if (currentMethod.getParameterCount()>0){
+                Matcher matcher = currentPattern.matcher(line);
+                if (matcher.find()){
+                    currentMethod.invoke(this.linkedListManager,
+                                        matcher.group(1));
+                }
             }
             else {
-                throw new RuntimeException("Не получилось распарсить аргумент");
+                currentMethod.invoke(this.linkedListManager);
             }
-        }
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e){
+            ConsoleManager.getInstance().printError(e);
+        }catch (NullPointerException e){
 
-        switch (current){
-            case EXIT : {
-                return true;
-            }
-            case HELP : {
-                linkedListManager.help();
-                break;
-            }
-            case INFO : {
-                linkedListManager.info();
-                break;
-            }
-            case ADD : {
-                linkedListManager.add();
-                break;
-            }
-            case SHOW : {
-                linkedListManager.show();
-                break;
-            }
-            case UPDATE : {
-                linkedListManager.update(argument);
-                break;
-            }
-            case REMOVE_BY_ID : {
-                linkedListManager.removeById(argument);
-                break;
-            }
-            case CLEAR : {
-                linkedListManager.clear();
-                break;
-            }
-            case SAVE : {
-                linkedListManager.save();
-                break;
-            }
-            case EXECUTE_SCRIPT : {
-                linkedListManager.executeScript(argument);
-                break;
-            }
-            case REMOVE_FIRST : {
-                linkedListManager.removeFirst();
-                break;
-            }
-            case REMOVE_LOWER : {
-                linkedListManager.removeLower();
-                break;
-            }
-            case REMOVE_ALL_BY_VIEW : {
-                linkedListManager.removeAllByView(argument);
-                break;
-            }
-            case GROUP_COUNTING_BY_CREATION_DATE : {
-                linkedListManager.groupCountingByCreationDate();
-                break;
-            }
-            case COUNT_GREATER_THAN_FURISH : {linkedListManager.countGreaterThanFurish(argument);break;}
-            default : System.out.println("Команда не распознана");
         }
         return false;
     }
+
 }

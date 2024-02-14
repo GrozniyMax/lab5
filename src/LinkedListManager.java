@@ -5,10 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -19,6 +16,10 @@ public class LinkedListManager {
     private LinkedList<Flat> list;
 
     final public ZonedDateTime creationDate;
+
+
+
+
     /**
      * Конструктор
      * @param list - коллекция
@@ -72,7 +73,7 @@ public class LinkedListManager {
      * Добавляет элемент в коллекцию
      */
     public void add(){
-        Flat object = new ObjectFiller().finnalizeObject();
+        Flat object = ConsoleManager.getInstance().readFlat();
         object.setId(Long.valueOf(list.size()));
         list.add(object);
     }
@@ -81,19 +82,32 @@ public class LinkedListManager {
      * Обновляет элемент коллекции
      * @param argument - id в виде строки
      */
-    public void update(String argument) throws IndexOutOfBoundsException{
-        Integer id = Integer.parseInt(argument.strip());
-        list.set( id, new ObjectFiller().finnalizeObject());
+    public void update(String argument) throws IllegalArgumentException{
+        try {
+            Integer id = Integer.parseInt(argument.strip());
+            list.set( id,
+                    ConsoleManager.getInstance().readFlat());
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("id больше чем количество элементов массива");
+        }catch (NumberFormatException e){
+            throw new IllegalArgumentException("Некорректно введенный id");
+        }
     }
     /**
      * Удаляет элемент коллекции
      * @param argument - id в виде строки
      */
-    public void removeById(String argument) throws IndexOutOfBoundsException {
-        Integer id = Integer.parseInt(argument);
-        list.remove(id);
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).setId(Long.valueOf(i));
+    public void removeById(String argument) throws IllegalArgumentException {
+        try {
+            Integer id = Integer.parseInt(argument.strip());
+            list.remove(id);
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setId(Long.valueOf(i));
+            }
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("id больше чем количество элементов массива");
+        }catch (NumberFormatException e){
+            throw new IllegalArgumentException("Некорректно введенный id");
         }
     }
     /**
@@ -131,7 +145,9 @@ public class LinkedListManager {
             }
             for (String command :
                     commands) {
-                commandHandler.handle(command);
+                if(commandHandler.handle(command)) {
+                    break;
+                }
             }
         } catch (IOException e) {
             System.out.println("Прочитать файл не удалось");

@@ -41,11 +41,6 @@ public class Main {
         finally {
             runApp(new CommandHandler(manager));
         }
-
-
-
-
-
     }
     /**
      * Запуск программы
@@ -53,10 +48,11 @@ public class Main {
      */
     public static void runApp(CommandHandler commandHandler){
         boolean exit = false;
-        Scanner scanner = new Scanner(System.in);
+        ConsoleManager manager = ConsoleManager.getInstance();
         while (!exit){
-            exit = commandHandler.handle(scanner.nextLine());
+            exit = commandHandler.handle(manager.readLine(""));
         }
+
         
     }
 }

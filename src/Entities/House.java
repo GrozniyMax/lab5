@@ -14,7 +14,7 @@ public class House {
      * @throws IllegalArgumentException - если значение поля name некорректно
      */
     public void setName(String name) throws IllegalArgumentException {
-        if (name==null) throw new IllegalArgumentException("Некорректное значение House.name");
+        if ((name==null)||(name.equals(""))) throw new IllegalArgumentException("Некорректное значение House.name. Оно не должно быть пустым");
         this.name = name;
     }
     /**
