@@ -1,9 +1,7 @@
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,79 +11,72 @@ import java.util.regex.Pattern;
 public class CommandHandler {
 
     LinkedListManager linkedListManager;
-    static Map<Pattern, String> methods;
+    String[] history;
+    int historyIndex = 0;
 
-    //Добавляем все методы в словарь
-    static {
-        methods = new HashMap<>();
 
-        //Добавляем все методы в словарь
-        methods.put(Pattern.compile("^\s*help\s*$"),"help");
-        methods.put(Pattern.compile("^\s*info\s*$"),"info");
-        methods.put(Pattern.compile("^\s*show\s*$"),"show");
-        methods.put(Pattern.compile("^\s*add\s*$"),"add");
-        methods.put(Pattern.compile("^\s*update\s+(\\d+)$"),"update");
-        methods.put(Pattern.compile("^\s*update\s+(\\d+)$"),"removeById");
-        methods.put(Pattern.compile("^\s*clear\s*$"),"clear");
-        methods.put(Pattern.compile("^\s*save\s*$"),"save");
-        methods.put(Pattern.compile("^\s*update\s+(.+)$"),"executeScript");
-        methods.put(Pattern.compile("^\s*exit\s*$"),"exit");
-        methods.put(Pattern.compile("^\s*remove_first\s*$"),"removeFirst");
-        methods.put(Pattern.compile("^\s*remove_lower\s+(.+)\s*$"),"remove_lower");
-        methods.put(Pattern.compile("^\s*remove_all_by_view\s+(.+)\s*$"),"remove_all_by_view");
-        methods.put(Pattern.compile("^\s*group_by_creation_date\s*$"),"group_by_creation_date");
-        methods.put(Pattern.compile("^\s*count_greater_than_furish\s+(.+)$"),"count_greater_than_furish");
-    }
 
     /**
      * Конструктор
      * @param linkedListManager - менеджер коллекцией
      */
     public CommandHandler(LinkedListManager linkedListManager) {
+        this.history = new String[5];
         this.linkedListManager = linkedListManager;
     }
 
-
-    /**
-     * Обработка команды
-     * @param line - строка, которую ввел пользователь
-     * @return - true, если нужно завершить программу
-     */
-    public boolean handle(String line){
-        String currentMethodName = null;
-        Pattern currentPattern = null;
-        for (Pattern command:
-             methods.keySet()) {
-            //write code that check does the line match the pattern
-            if (command.matcher(line).matches()){
-                currentPattern = command;
-                currentMethodName = methods.get(currentPattern);
-                break;
+    private void getHistory(){
+        InputManager m = InputManager.getInstance();
+        for (int i = historyIndex; i < historyIndex+5; i++) {
+            if (history[i%5]!=null) {
+                m.print(history[i % 5]);
             }
         }
+    }
+
+    private void addHistory(String command){
+        history[historyIndex] = command;
+        historyIndex = (historyIndex+1)%5;
+    }
+
+    public boolean handle(Pair<Command, Matcher> pair) throws RuntimeException{
         try {
-            currentPattern = Objects.requireNonNull(currentPattern,"Не получилось распознать команду");
-            if (currentMethodName.contains("exit")) return true;
-            Method currentMethod = LinkedListManager.class.getMethod(Objects.requireNonNull(currentMethodName,
-                                                            "Не получилось распознать команду"));
+            String methodName = pair.getKey().getCommandName();
+            if (methodName.equals("exit")) return true;
+            if (methodName.equals("history")) {
+                getHistory();
+                addHistory(methodName);
+                return false;
+            }
+            addHistory(methodName);
+            Method currentMethod = findMethod(methodName);
             if (currentMethod.getParameterCount()>0){
-                Matcher matcher = currentPattern.matcher(line);
-                if (matcher.find()){
-                    currentMethod.invoke(this.linkedListManager,
-                                        matcher.group(1));
-                }
+                Matcher matcher = pair.getValue();
+                currentMethod.invoke(this.linkedListManager, matcher.group(1));
+
             }
             else {
                 currentMethod.invoke(this.linkedListManager);
             }
         } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+
             throw new RuntimeException(e);
         } catch (IllegalArgumentException e){
-            ConsoleManager.getInstance().printError(e);
+            InputManager.getInstance().printError(e);
         }catch (NullPointerException e){
-
+            if (e.getMessage().equals("EOF")) return true;
         }
         return false;
+    }
+
+
+    private Method findMethod(String methodName) throws NoSuchMethodException {
+        for (Method method : LinkedListManager.class.getDeclaredMethods()) {
+            if (method.getName().equals(methodName)) {
+                return method;
+            }
+        }
+        throw new NoSuchMethodException();
     }
 
 }

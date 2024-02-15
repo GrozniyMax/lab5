@@ -8,16 +8,17 @@ import java.util.regex.Pattern;
 /**
  * Класс для управления консолью
  */
-public class ConsoleManager {
+public class InputManager {
     //TODO Добавить обработку файла(execute_file)
-    private static ConsoleManager manager;
-    protected BufferedReader reader;
-    protected PrintStream printStream;
-    protected PrintStream errorStream;
+    private static InputManager manager;
+    private BufferedReader reader;
+    private PrintStream printStream;
+    private PrintStream errorStream;
+    private static boolean isSilent = false;
 
     static {
         //Инициализируем классический менеджер консоли
-        manager = new ConsoleManager(System.in,System.out,System.err);
+        manager = new InputManager(System.in,System.out,System.err);
     }
     /**
      * Конструктор
@@ -25,10 +26,14 @@ public class ConsoleManager {
      * @param printTo - поток вывода
      * @param errStream - поток вывода ошибок
      */
-    private ConsoleManager(InputStream readFrom, PrintStream printTo, PrintStream errStream) {
+    private InputManager(InputStream readFrom, PrintStream printTo, PrintStream errStream) {
         this.printStream = printTo;
         this.errorStream = errStream;
         this.reader = new BufferedReader(new InputStreamReader(readFrom));
+    }
+
+    public static void setSilent(boolean silent) {
+        isSilent = silent;
     }
 
     /**
@@ -37,15 +42,15 @@ public class ConsoleManager {
      * @param printTo - поток вывода
      * @param errStream - поток вывода ошибок
      */
-    public void setСustomStreams(InputStream readFrom, PrintStream printTo, PrintStream errStream){
-        manager = new ConsoleManager(readFrom,printTo,errStream);
+    public static void setСustomStreams(InputStream readFrom, PrintStream printTo, PrintStream errStream){
+        manager = new InputManager(readFrom,printTo,errStream);
     }
 
     /**
      * Возвращает экземпляр менеджера консоли
      * @return экземпляр менеджера консоли
      */
-    public static ConsoleManager getInstance(){
+    public static InputManager getInstance(){
         return Objects.requireNonNull(manager,"You need to setStreams first");
     }
 
@@ -182,8 +187,11 @@ public class ConsoleManager {
      * @return Furnish - прочтенный Furnish
      */
     public Furnish readFurish(){
-
         return Furnish.valueOf(this.readLine().strip());
+    }
+    public Furnish readFurish(String prefix){
+        this.print(prefix,"");
+        return this.readFurish();
     }
 
     /**
@@ -191,20 +199,37 @@ public class ConsoleManager {
      * @return View - прочтенный View
      */
     public View readView(){
-        this.print("Введите View(STREET,YARD,PARK,BAD,GOOD) : ","");
+        return View.valueOf(this.readLine().strip());
+    }
+
+    public View readView(String prefix){
+        this.print(prefix,"");
         return View.valueOf(this.readLine().strip());
     }
     /**
      * Читает House из консоли
      * @return House - прочтенный House
      */
-    public House readHouse(){
+    private House readHouseLoud(){
         House object = new House();
         this.doUntillCorrect(()->object.setName(this.readLine("Введите Имя дома: ")),
                 ()->object.setYear(this.readInt("Введите год постройки: ")),
                 ()->object.setNumberOfFloors(this.readInt("Введите количество этажей дома: "))
         );
         return object;
+    }
+
+    private House readHouseSilent()throws IllegalArgumentException{
+        House object = new House();
+        object.setName(this.readLine());
+        object.setYear(this.readInt());
+        object.setNumberOfFloors(this.readInt());
+        return object;
+    }
+
+    public House readHouse() throws IllegalArgumentException{
+        if (isSilent) return readHouseSilent();
+        return readHouseLoud();
     }
 
     /**
@@ -232,31 +257,66 @@ public class ConsoleManager {
         }
     }
 
+    public Transport readTransport(){
+        return Transport.valueOf(this.readLine().strip());
+    }
+
     /**
      * Читает Transport из консоли
      * @return Transport - прочтенный Transport
      */
-    public Transport readTransport(){
-        this.print("Введите Transport(NONE,LITTLE,NORMAL,ENOUGH): ","");
-        return Transport.valueOf(this.readLine().strip());
+    public Transport readTransport(String prefix){
+        this.print(prefix,"");
+        return this.readTransport();
     }
 
     /**
      * Читает Flat из консоли
      * @return Flat - прочтенный Flat
      */
-    public Flat readFlat(){
+    private Flat readFlatLoud() {
         Flat object = new Flat();
         this.doUntillCorrect(()->object.setName(this.readLine("Введите Имя: ")),
                 ()->object.setCoordinates(this.readCoordinates()),
                 ()->object.setArea(this.readInt("Введите площадь: ")),
                 ()->object.setNumberOfRooms(this.readLong("Введите количество комнат: ")),
-                ()->object.setFurnish(this.readFurish()),
-                ()->object.setView(this.readView()),
-                ()->object.setTransport(this.readTransport()),
+                ()->object.setFurnish(this.readFurish("Введите Furish (DESIGNER, NONE, LITTLE): ")),
+                ()->object.setView(this.readView("Введите View (STREET, YARD, PARK, BAD, GOOD): ")),
+                ()->object.setTransport(this.readTransport("Введите Transport (NONE, LITTLE, NORMAL, ENOUGH): ")),
                 ()->object.setHouse(this.readHouse())
         );
         return object;
     }
+
+    private Flat readFlatSilent() throws IllegalArgumentException{
+        Flat object = new Flat();
+        object.setName(this.readLine());
+        object.setCoordinates(this.readCoordinates());
+        object.setArea(this.readInt());
+        object.setNumberOfRooms(this.readLong());
+        object.setFurnish(this.readFurish());
+        object.setView(this.readView());
+        object.setTransport(this.readTransport());
+        object.setHouse(this.readHouse());
+        return object;
+    }
+
+    public Flat readFlat(){
+        if (isSilent) return readFlatSilent();
+        return readFlatLoud();
+    }
+
+
+    public Pair<Command,Matcher> readCommand() throws IllegalArgumentException,NullPointerException{
+        String line = Objects.requireNonNull(this.readLine(),"EOF");
+        for (Command command:
+                Command.values()) {
+            Matcher matcher = command.getPattern().matcher(line);
+            if (matcher.matches()) return new Pair<>(command,matcher);
+        }
+        throw new IllegalArgumentException("Команда не распознана");
+    }
+
+    // TODO Протестировать
 
 }

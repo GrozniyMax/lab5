@@ -1,17 +1,13 @@
 import Entities.*;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.*;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.LinkedList;
 
 public final class JsonHandler {
     static String filePath;
@@ -113,21 +109,19 @@ public final class JsonHandler {
      * @return - менеджер коллекции
      * @throws IllegalArgumentException - если файл не найден
      */
-    static LinkedListManager load() throws IllegalArgumentException{
+    static LinkedListManager load() throws IllegalArgumentException, IOException {
 
         StringBuilder lines = new StringBuilder();
         ZonedDateTime resultTime;
 
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(filePath))) {
+        BufferedReader reader = Files.newBufferedReader(Path.of(filePath));
             for (; ; ) {
                 String line = reader.readLine();
                 if (line == null)
                     break;
                 lines.append(line.replace("\n",""));
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Не получилось распарсить коллекцию из JSON-файла");
-        }
+
 
 
 

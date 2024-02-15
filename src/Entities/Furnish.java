@@ -1,7 +1,9 @@
 package Entities;
 
-public enum Furnish {
+public enum Furnish implements Comparable<Furnish>{
     DESIGNER,
     NONE,
     LITTLE;
+
+
 }
