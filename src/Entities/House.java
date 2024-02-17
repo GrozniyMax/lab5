@@ -35,7 +35,10 @@ public class House {
         if (numberOfFloors < 0) throw new IllegalArgumentException("Некорректное значение House.numberOfFloors");
         this.numberOfFloors = numberOfFloors;
     }
-
+    /**
+     * Возвращает строковое представление объекта House
+     * @return строковое представление объекта House
+     */
     @Override
     public String toString() {
         return "House{" +

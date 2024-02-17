@@ -5,7 +5,13 @@ package Entities;
  */
 public class Coordinates {
 
+    /**
+     * Поле x - координата x
+     */
     private Integer x; //Максимальное значение поля: 606, Поле не может быть null
+    /**
+     * Поле y - координата y
+     */
     private Float y; //Поле не может быть null
 
     public Coordinates() {
@@ -29,6 +35,10 @@ public class Coordinates {
         this.y = y;
     }
 
+    /**
+     * Возвращает строковое представление объекта Coordinates
+     * @return строковое представление объекта Coordinates
+     */
     @Override
     public String toString() {
         return "Coordinates{" +

@@ -1,3 +1,5 @@
+package Managers;
+
 import Entities.*;
 import com.google.gson.Gson;
 
@@ -9,7 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 
-public final class JsonHandler {
+public final class JsonManager {
     static String filePath;
 
 
@@ -20,8 +22,8 @@ public final class JsonHandler {
         LinkedList<FlatParams> list;
         public Date creationTime;
         /**
-         * Конструктор для создания объекта из объекта класса LinkedListManager
-         * @param manager - объект класса LinkedListManager
+         * Конструктор для создания объекта из объекта класса Managers.LinkedListManager
+         * @param manager - объект класса Managers.LinkedListManager
          */
         public ManagerAdapter(LinkedListManager manager) {
             this.list = new LinkedList<>();
@@ -80,7 +82,7 @@ public final class JsonHandler {
      * @param manager - менеджер коллекции
      * @throws FileNotFoundException - если файл не найден
      */
-    static void dump(LinkedListManager manager) throws FileNotFoundException {
+    public static void dump(LinkedListManager manager) throws FileNotFoundException {
         ManagerAdapter managerAdapter = new ManagerAdapter(manager);
         OutputStreamWriter writer = null;
         Gson g = new Gson();
@@ -109,10 +111,11 @@ public final class JsonHandler {
      * @return - менеджер коллекции
      * @throws IllegalArgumentException - если файл не найден
      */
-    static LinkedListManager load() throws IllegalArgumentException, IOException {
+    public static LinkedListManager load() throws IllegalArgumentException, IOException {
 
         StringBuilder lines = new StringBuilder();
         ZonedDateTime resultTime;
+
 
         BufferedReader reader = Files.newBufferedReader(Path.of(filePath));
             for (; ; ) {

@@ -1,15 +1,18 @@
+package Managers;
+
 import Entities.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import Commands.Command;
+import Utils.Pair;
 
 /**
- * Класс для управления консолью
+ * Класс для управления вводом/выводом
  */
 public class InputManager {
-    //TODO Добавить обработку файла(execute_file)
+
     private static InputManager manager;
     private BufferedReader reader;
     private PrintStream printStream;
@@ -32,6 +35,9 @@ public class InputManager {
         this.reader = new BufferedReader(new InputStreamReader(readFrom));
     }
 
+    /**
+     * Переводит менеджер в тихий режим(для обработки файлов)
+     */
     public static void setSilent(boolean silent) {
         isSilent = silent;
     }
@@ -160,12 +166,14 @@ public class InputManager {
         printStream.print(prefix);
         return Float.parseFloat(this.readLine().strip());
     }
+
+
+
     /**
      * Читает координаты из консоли
      * @return Coordinates - прочтенные координаты
      */
     public Coordinates readCoordinates() throws IllegalArgumentException{
-        System.out.print("Введите Координаты в формате x y : ");
         String[] values = this.readLine().strip().split(" +");
         if (!(values.length ==2)) throw new IllegalArgumentException(" Необходимо вводить ровно 2 коодинаты");
         Coordinates coordinates = new Coordinates();
@@ -178,7 +186,7 @@ public class InputManager {
      * @param prefix - префикс
      * @return Coordinates - прочтенные координаты
      */
-    public Coordinates readCoordinates(String prefix){
+    public Coordinates readCoordinates(String prefix) throws IllegalArgumentException{
         printStream.print(prefix);
         return this.readCoordinates();
     }
@@ -189,6 +197,11 @@ public class InputManager {
     public Furnish readFurish(){
         return Furnish.valueOf(this.readLine().strip());
     }
+    /**
+     * Читает Furnish из консоли добавляя префикс
+     * @param prefix - префикс
+     * @return Furnish - прочтенный Furnish
+     */
     public Furnish readFurish(String prefix){
         this.print(prefix,"");
         return this.readFurish();
@@ -202,12 +215,17 @@ public class InputManager {
         return View.valueOf(this.readLine().strip());
     }
 
+    /**
+     * Читает View из консоли добавляя префикс
+     * @param prefix - префикс
+     * @return View - прочтенный View
+     */
     public View readView(String prefix){
         this.print(prefix,"");
         return View.valueOf(this.readLine().strip());
     }
     /**
-     * Читает House из консоли
+     * Читает House из консоли в громком режиме
      * @return House - прочтенный House
      */
     private House readHouseLoud(){
@@ -218,7 +236,10 @@ public class InputManager {
         );
         return object;
     }
-
+    /**
+     * Читает House из консоли в тихом режиме
+     * @return House - прочтенный House
+     */
     private House readHouseSilent()throws IllegalArgumentException{
         House object = new House();
         object.setName(this.readLine());
@@ -226,7 +247,10 @@ public class InputManager {
         object.setNumberOfFloors(this.readInt());
         return object;
     }
-
+    /**
+     * Читает House из консоли
+     * @return House - прочтенный House
+     */
     public House readHouse() throws IllegalArgumentException{
         if (isSilent) return readHouseSilent();
         return readHouseLoud();
@@ -257,12 +281,16 @@ public class InputManager {
         }
     }
 
+    /**
+     * Читает Transport из консоли
+     * @return Transport - прочтенный Transport
+     */
     public Transport readTransport(){
         return Transport.valueOf(this.readLine().strip());
     }
 
     /**
-     * Читает Transport из консоли
+     * Читает Transport из консоли выводя префикс
      * @return Transport - прочтенный Transport
      */
     public Transport readTransport(String prefix){
@@ -271,13 +299,13 @@ public class InputManager {
     }
 
     /**
-     * Читает Flat из консоли
+     * Читает Flat из консоли в громком режиме
      * @return Flat - прочтенный Flat
      */
     private Flat readFlatLoud() {
         Flat object = new Flat();
         this.doUntillCorrect(()->object.setName(this.readLine("Введите Имя: ")),
-                ()->object.setCoordinates(this.readCoordinates()),
+                ()->object.setCoordinates(this.readCoordinates("Введите Координаты в формате x y : ")),
                 ()->object.setArea(this.readInt("Введите площадь: ")),
                 ()->object.setNumberOfRooms(this.readLong("Введите количество комнат: ")),
                 ()->object.setFurnish(this.readFurish("Введите Furish (DESIGNER, NONE, LITTLE): ")),
@@ -288,6 +316,10 @@ public class InputManager {
         return object;
     }
 
+    /**
+     * Читает Flat из консоли в тихом режиме
+     * @return Flat - прочтенный Flat
+     */
     private Flat readFlatSilent() throws IllegalArgumentException{
         Flat object = new Flat();
         object.setName(this.readLine());
@@ -301,22 +333,27 @@ public class InputManager {
         return object;
     }
 
+    /**
+     * Читает Flat из консоли
+     * @return Flat - прочтенный Flat
+     */
     public Flat readFlat(){
         if (isSilent) return readFlatSilent();
         return readFlatLoud();
     }
 
-
-    public Pair<Command,Matcher> readCommand() throws IllegalArgumentException,NullPointerException{
+    /**
+     * Читает команду из консоли
+     * @param commands - список команд
+     * @return Pair<Command, Matcher> - команда и матчер
+     */
+    public Pair<Commands.Command, Matcher> readCommand(List<Commands.Command> commands) throws IllegalArgumentException,NullPointerException{
         String line = Objects.requireNonNull(this.readLine(),"EOF");
-        for (Command command:
-                Command.values()) {
-            Matcher matcher = command.getPattern().matcher(line);
-            if (matcher.matches()) return new Pair<>(command,matcher);
+        for (Command c :
+                commands) {
+            Matcher matcher = c.getPattern().matcher(line);
+            if (matcher.matches()) return new Pair<>(c,matcher);
         }
         throw new IllegalArgumentException("Команда не распознана");
     }
-
-    // TODO Протестировать
-
 }

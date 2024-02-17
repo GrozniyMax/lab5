@@ -1,5 +1,10 @@
 import Entities.Flat;
+import Managers.InputManager;
+import Managers.JsonManager;
+import Managers.LinkedListManager;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.time.ZonedDateTime;
 import java.util.LinkedList;
 
@@ -11,19 +16,20 @@ public class Main {
      * @param args - аргументы командной строки
      */
     public static void main(String[] args) {
-        //TODO Протестировать команды
 
         String fileName = System.getenv("collectionFileName");
+
         if (fileName == null)  {
             System.out.println("Нужно запускать файл с переменной окружения " +
                     "'fileNameCollection' (названием файла, откуда брать коллекцию)!!!\n Будет использован базовый(~/dumping.json)");
-            fileName = System.getProperty("user.dir") + "\\dumping.json";
+            fileName = "dumping.json";
         }
-
-        JsonHandler.setFilePath(fileName);
+        //Приводим путь к абсолютному виду
+        fileName = FileSystems.getDefault().getPath(fileName).normalize().toAbsolutePath().toString();
+        JsonManager.setFilePath(fileName);
         LinkedListManager manager=new LinkedListManager(new LinkedList<Flat>(), ZonedDateTime.now());
         try {
-             manager = JsonHandler.load();
+             manager = JsonManager.load();
         } catch (IllegalArgumentException e) {
             System.err.println("В указаном файле в JSON есть ошибка");
         }
@@ -31,19 +37,19 @@ public class Main {
             System.out.println("Поскольку что-то пошло не так, у нас не получилось распарсить коллекцию");
         }
         finally {
-            runApp(new CommandHandler(manager));
+            runApp(manager);
         }
     }
     /**
      * Запуск программы
      * @param commandHandler - обработчик команд
      */
-    public static void runApp(CommandHandler commandHandler){
+    public static void runApp(LinkedListManager linkedListManager){
         boolean exit = false;
         InputManager manager = InputManager.getInstance();
         while (!exit){
             try {
-                exit = commandHandler.handle(manager.readCommand());
+                exit = linkedListManager.handle(manager.readCommand(linkedListManager.getCommands()));
             }catch (IllegalArgumentException e){
                 InputManager.getInstance().printError(e);
             }
