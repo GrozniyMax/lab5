@@ -7,6 +7,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
 import java.util.LinkedList;
+import java.util.Objects;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -17,13 +18,14 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        String fileName = System.getenv("collectionFileName");
-
-        if (fileName == null)  {
-            System.out.println("Нужно запускать файл с переменной окружения " +
-                    "'fileNameCollection' (названием файла, откуда брать коллекцию)!!!\n Будет использован базовый(~/dumping.json)");
+        String fileName = null;
+        try {
+            fileName = Objects.requireNonNull(System.getenv("collectionFileName"));
+        } catch (Throwable e){
+            InputManager.getInstance().print("Что-то пошло не так извлечением пути к файлу. Будет использоваться ~/dumping.json");
             fileName = "dumping.json";
         }
+
         //Приводим путь к абсолютному виду
         fileName = FileSystems.getDefault().getPath(fileName).normalize().toAbsolutePath().toString();
         JsonManager.setFilePath(fileName);
@@ -42,7 +44,7 @@ public class Main {
     }
     /**
      * Запуск программы
-     * @param commandHandler - обработчик команд
+     * @param linkedListManager - обработчик команд
      */
     public static void runApp(LinkedListManager linkedListManager){
         boolean exit = false;

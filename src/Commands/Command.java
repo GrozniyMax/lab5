@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 /**
  * Абстрактный класс команды
- * @autor Максим Тараненко
+ * @author Максим Тараненко
  */
 public abstract class Command {
 

@@ -345,7 +345,7 @@ public class InputManager {
     /**
      * Читает команду из консоли
      * @param commands - список команд
-     * @return Pair<Command, Matcher> - команда и матчер
+     * @return Pair[Command, Matcher] - команда и матчер
      */
     public Pair<Commands.Command, Matcher> readCommand(List<Commands.Command> commands) throws IllegalArgumentException,NullPointerException{
         String line = Objects.requireNonNull(this.readLine(),"EOF");
