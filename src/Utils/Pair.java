@@ -1,33 +1,33 @@
 package Utils;
 
 /**
- * РљР»Р°СЃСЃ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РѕР±СЉРµРєС‚Р° С‚РёРїР° Pair
- * @param <K> - С‚РёРї РєР»СЋС‡Р°
- * @param <V> - С‚РёРї Р·РЅР°С‡РµРЅРёСЏ
+ * Класс для хранения объекта типа Pair
+ * @param <K> - тип ключа
+ * @param <V> - тип значения
  */
 public class Pair <K,V>{
     private final K key;
     private final V value;
 
     /**
-     * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
-     * @param key - РєР»СЋС‡
-     * @param value - Р·РЅР°С‡РµРЅРёРµ
+     * Конструктор
+     * @param key - ключ
+     * @param value - значение
      */
     public Pair(K key, V value){
         this.key = key;
         this.value = value;
     }
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ РєР»СЋС‡
-     * @return РєР»СЋС‡
+     * Возвращает ключ
+     * @return ключ
      */
     public K getKey() {
         return key;
     }
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ Р·РЅР°С‡РµРЅРёРµ
-     * @return Р·РЅР°С‡РµРЅРёРµ
+     * Возвращает значение
+     * @return значение
      */
     public V getValue() {
         return value;

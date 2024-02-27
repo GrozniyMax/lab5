@@ -1,30 +1,22 @@
 package Commands;
 
-import Managers.InputManager;
-import Managers.LinkedListManager;
-
-import java.util.regex.Matcher;
 /**
- * РљРѕРјР°РЅРґР° "info" - РІС‹РІРѕРґРёС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РєРѕР»Р»РµРєС†РёРё
+ * Команда "info" - выводит информацию о коллекции
  */
-public class Info extends Command{
+public class Info extends BaseCommand implements CommandWithoutInput{
     /**
-     * РџСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
-     * @see Command
+     * Пустой конструктор
+     * @see BaseCommand
      */
     public Info() {
-        super("info","РІС‹РІРѕРґРёС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РєРѕР»Р»РµРєС†РёРё","^\s*info\s*$");
+        super("info","выводит информацию о коллекции");
     }
-    /**
-     * Р РµР°Р»РёР·Р°С†РёСЏ РєРѕРјР°РЅРґС‹
-     * @param manager - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @param matcher - Matcher, СЃ РїРѕРјРѕС‰СЊСЋ РєРѕС‚РѕСЂРѕРіРѕ РјРѕР¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ РєРѕРјР°РЅРґС‹
-     */
+
+
     @Override
-    public void execute(LinkedListManager manager, Matcher matcher) {
-        InputManager m = InputManager.getInstance();
-        m.print("Р”РђРўРђ РЎРћР—Р”РђРќРРЇ: "+ manager.creationDate.toString());
-        m.print("РўРРџ РљРћР›Р›Р•РљР¦РР: "+manager.getList().getClass().getSimpleName());
-        m.print("РљРћР›РР§Р•РЎРўР’Рћ Р­Р›Р•РњР•РќРўРћР’: "+ manager.getList().size());
+    public void execute(CollectionWrappers.CollectionManager manager, String argument) {
+        System.out.println("ДАТА СОЗДАНИЯ: "+ manager.getCollection().creationDate.toString());
+        System.out.println("ТИП КОЛЛЕКЦИИ: "+manager.getList().getClass().getSimpleName());
+        System.out.println("КОЛИЧЕСТВО ЭЛЕМЕНТОВ: "+ manager.getList().size());
     }
 }

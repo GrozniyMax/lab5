@@ -1,36 +1,32 @@
 package Commands;
 
+import CollectionWrappers.CollectionManager;
 import Entities.Flat;
-import Managers.InputManager;
-import Managers.LinkedListManager;
+import Input.BaseInputManager;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
 /**
- * РљР»Р°СЃСЃ РєРѕРјР°РЅРґС‹ РіСЂСѓРїРїРёСЂРѕРІРєРё СЌР»РµРјРµРЅС‚РѕРІ РїРѕ РґР°С‚Рµ СЃРѕР·РґР°РЅРёСЏ
+ * Класс команды группировки элементов по дате создания
  */
-public class GroupCountingByCreationDate extends Command{
+public class GroupCountingByCreationDate extends BaseCommand implements CommandWithoutInput{
     /**
-     * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР° РєРѕРјР°РЅРґС‹
-     * @see Command
+     * Конструктор класса команды
+     * @see BaseCommand
      */
     public GroupCountingByCreationDate() {
         super("group_counting_by_creation_date",
-                "РіСЂСѓРїРїРёСЂСѓРµС‚ СЌР»РµРјРµРЅС‚С‹ РїРѕ РґР°С‚Рµ СЃРѕР·РґР°РЅРёСЏ, РІС‹РІРѕРґСЏ РёС… РєРѕР»РёС‡РµСЃС‚РІРѕ",
-                "^\s*group_counting_by_creation_date\s*$");
+                "группирует элементы по дате создания, выводя их количество");
     }
-    /**
-     * РћР±СЂР°Р±РѕС‚С‡РёРє РєРѕРјР°РЅРґС‹
-     * @param collection - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @param matcher - Р°СЂРіСѓРјРµРЅС‚С‹ РєРѕРјР°РЅРґС‹
-     */
+
+
     @Override
-    public void execute(LinkedListManager collection, Matcher matcher) {
+    public void execute(CollectionManager manager, String argument) {
         HashMap<ZonedDateTime,Integer> dates = new HashMap<>();
         ZonedDateTime currentDate;
-        for (Flat flat : collection.getList()) {
+        for (Flat flat : manager.getList()) {
             currentDate = flat.getCreationDate();
             if (dates.containsKey(currentDate)){
                 dates.put(currentDate,dates.get(currentDate)+1);
@@ -39,9 +35,8 @@ public class GroupCountingByCreationDate extends Command{
                 dates.put(currentDate,1);
             }
         }
-        InputManager m = InputManager.getInstance();
         for (ZonedDateTime time: dates.keySet()) {
-            m.print(time.toString()+" : "+dates.get(time).toString());
+            System.out.println(time.toString()+" : "+dates.get(time).toString());
         }
     }
 }

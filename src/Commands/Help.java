@@ -1,35 +1,27 @@
 package Commands;
 
-import Managers.InputManager;
-import Managers.LinkedListManager;
+import Input.BaseInputManager;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.LinkedList;
 
 /**
- * ÐšÐ¾Ð¼Ð°Ð½Ð´Ð° "help" - Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ñ‚ Ð¿Ñ€Ð°Ð²ÐºÑƒ Ð¿Ð¾ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹Ð¼ ÐºÐ¾Ð¼Ð°Ð½Ð´Ð°Ð¼
+ * Êîìàíäà "help" - âûâîäèò ïðàâêó ïî äîñòóïíûì êîìàíäàì
  */
-public class Help extends Command{
+public class Help extends BaseCommand {
     /**
-     * ÐŸÑƒÑÑ‚Ð¾Ð¹ ÐºÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€
-     * @see Command
+     * Ïóñòîé êîíñòðóêòîð
+     * @see BaseCommand
      */
     public Help() {
-        super("help","Ð’Ñ‹Ð²Ð¾Ð´Ð¸Ñ‚ Ð¿Ñ€Ð°Ð²ÐºÑƒ Ð¿Ð¾ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹Ð¼ ÐºÐ¾Ð¼Ð°Ð½Ð´Ð°Ð¼","^\s*help\s*$");
+        super("help","Âûâîäèò ïðàâêó ïî äîñòóïíûì êîìàíäàì");
     }
 
-    /**
-     * Ð ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹
-     * @param manager - Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€ ÐºÐ¾Ð»Ð»ÐµÐºÑ†Ð¸Ð¸
-     * @param matcher - Matcher, Ñ Ð¿Ð¾Ð¼Ð¾Ñ‰ÑŒÑŽ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð³Ð¾ Ð¼Ð¾Ð¶Ð½Ð¾ Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚ÑŒ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ñ‹ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹
-     */
-    @Override
-    public void execute(LinkedListManager manager, Matcher matcher) {
-        InputManager m = InputManager.getInstance();
-        m.print("ÐžÐ§Ð•ÐÐ¬ Ð’ÐÐ–ÐÐž: Ð’Ð²Ð¾Ð´Ð¸Ñ‚ÑŒ Ð¿Ð¾Ð»Ñ Flat Ð² ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐ¼ Ð¿Ð¾Ñ€ÑÐ´ÐºÐµ: name, coordinates, area, numberOfRooms, furnish, view, transport, house");
-        m.print("ÐŸÐ¾Ð»Ñ house Ð²Ð²Ð¾Ð´Ð¸Ñ‚ÑŒ Ð² ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐ¼ Ð¿Ð¾Ñ€ÑÐ´ÐºÐµ: name, year, numberOfFloors, numberOfFloors");
-        m.print("Ð’ÑÐµ Ð¿Ð¾Ð»Ñ Ð²Ð²Ð¾Ð´ÑÑ‚ÑÑ Ð¿Ð¾ Ð¾Ð´Ð½Ð¾Ð¼Ñƒ Ð² ÑÑ‚Ñ€Ð¾ÐºÑƒ");
-        m.print("Ð”Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹Ðµ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹:");
-        manager.getCommands().forEach((Command c)->{m.print(c.getName()+" : "+c.getDescription());});
+
+    public void execute(LinkedList<Command> commands) {
+        System.out.println("Î×ÅÍÜ ÂÀÆÍÎ: Ââîäèòü ïîëÿ Flat â ñëåäóþùåì ïîðÿäêå: name, coordinates, area, numberOfRooms, furnish, view, transport, house");
+        System.out.println("Ïîëÿ house ââîäèòü â ñëåäóþùåì ïîðÿäêå: name, year, numberOfFloors, numberOfFloors");
+        System.out.println("Âñå ïîëÿ ââîäÿòñÿ ïî îäíîìó â ñòðîêó");
+        System.out.println("Äîñòóïíûå êîìàíäû:");
+        commands.forEach((Command c)->{System.out.println(c.getName()+" : "+c.getDescription());});
     }
 }

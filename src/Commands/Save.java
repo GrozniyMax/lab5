@@ -1,35 +1,30 @@
 package Commands;
 
-import Commands.Command;
-import Managers.InputManager;
+import CollectionWrappers.CollectionManager;
+import Input.BaseInputManager;
 import Managers.JsonManager;
-import Managers.LinkedListManager;
 
 import java.io.FileNotFoundException;
 import java.util.regex.Matcher;
 /**
- * РљРѕРјР°РЅРґР° "save" - СЃРѕС…СЂР°РЅСЏРµС‚ РєРѕР»Р»РµРєС†РёСЋ РІ С„Р°Р№Р»
+ * Команда "save" - сохраняет коллекцию в файл
  */
-public class Save extends Command {
+public class Save extends BaseCommand implements CommandWithoutInput{
     /**
-     * РџСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
-     * @see Command
+     * Пустой конструктор
+     * @see BaseCommand
      */
     public Save() {
         super("save",
-                "СЃРѕС…СЂР°РЅСЏРµС‚ РєРѕР»Р»РµРєС†РёСЋ РІ С„Р°Р№Р»",
-                "^\s*save\s*$");
+                "сохраняет коллекцию в файл");
     }
-    /**
-     * Р РµР°Р»РёР·Р°С†РёСЏ РєРѕРјР°РЅРґС‹
-     * @param collection - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @param matcher - Matcher, СЃ РїРѕРјРѕС‰СЊСЋ РєРѕС‚РѕСЂРѕРіРѕ РјРѕР¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ РєРѕРјР°РЅРґС‹
-     */
+
+
     @Override
-    public void execute(LinkedListManager collection, Matcher matcher) {
+    public void execute(CollectionManager manager, String argument) {
         try {
-            JsonManager.dump(collection);
-            InputManager.getInstance().print("РљРѕР»Р»РµРєС†РёСЏ СЃРѕС…СЂР°РЅРµРЅР°");
+            JsonManager.dump(manager.getCollection());
+            System.out.println("Коллекция сохранена");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

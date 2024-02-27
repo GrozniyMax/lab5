@@ -7,35 +7,35 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
- * РљР»Р°СЃСЃ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РѕР±СЉРµРєС‚Р° С‚РёРїР° Flat
+ * Класс для хранения объекта типа Flat
  */
 public class Flat implements Comparable<Flat>{
 
     static long lastId=0;
-    private Long id; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null, Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 0, Р—РЅР°С‡РµРЅРёРµ СЌС‚РѕРіРѕ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ СѓРЅРёРєР°Р»СЊРЅС‹Рј, Р—РЅР°С‡РµРЅРёРµ СЌС‚РѕРіРѕ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ РіРµРЅРµСЂРёСЂРѕРІР°С‚СЊСЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
-    private String name; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null, РЎС‚СЂРѕРєР° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚РѕР№
-    private Coordinates coordinates; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
-    private ZonedDateTime creationDate; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null, Р—РЅР°С‡РµРЅРёРµ СЌС‚РѕРіРѕ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ РіРµРЅРµСЂРёСЂРѕРІР°С‚СЊСЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
-    private Integer area; //РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ: 745, Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 0
-    private Long numberOfRooms; //Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 0
-    private Furnish furnish; //РџРѕР»Рµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
-    private View view; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
-    private Transport transport; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
-    private House house; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
+    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private String name; //Поле не может быть null, Строка не может быть пустой
+    private Coordinates coordinates; //Поле не может быть null
+    private ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    private Integer area; //Максимальное значение поля: 745, Значение поля должно быть больше 0
+    private Long numberOfRooms; //Значение поля должно быть больше 0
+    private Furnish furnish; //Поле может быть null
+    private View view; //Поле не может быть null
+    private Transport transport; //Поле не может быть null
+    private House house; //Поле не может быть null
     {
-        //Р±Р»РѕРє РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РѕР±СЉРµРєС‚Р°
+        //блок инициализации объекта
         this.id = lastId++;
         this.creationDate =  ZonedDateTime.now();
     }
 
     /**
-     * РџСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+     * Пустой конструктор
      */
     public Flat() {
     }
 
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ id
+     * Устанавливает значение поля id
      * @param id
      */
     public void setId(Long id) {
@@ -43,92 +43,92 @@ public class Flat implements Comparable<Flat>{
     }
 
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ name
+     * Устанавливает значение поля name
      * @param name
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ name РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * @throws IllegalArgumentException - если значение поля name некорректно
      */
     public void setName(String name) throws IllegalArgumentException {
-        if ((name==null)||name.equals("")) throw new IllegalArgumentException("РРјСЏ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
+        if ((name==null)||name.equals("")) throw new IllegalArgumentException("Имя не должно быть пустым");
         this.name = name;
     }
 
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ creationDate
+     * Устанавливает значение поля creationDate
      * @param creationDate
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ creationDate РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * @throws IllegalArgumentException - если значение поля creationDate некорректно
      */
     public void setCreationDate(ZonedDateTime creationDate)throws IllegalArgumentException {
-        if (creationDate==null) throw new IllegalArgumentException("Р”Р°С‚Р° РЅРµ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РїСѓСЃС‚Р°СЏ");
+        if (creationDate==null) throw new IllegalArgumentException("Дата не должна быть пустая");
         this.creationDate = creationDate;
     }
 
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ coordinates
+     * Устанавливает значение поля coordinates
      * @param coordinates
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ coordinates РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * @throws IllegalArgumentException - если значение поля coordinates некорректно
      */
     public void setCoordinates(Coordinates coordinates) throws IllegalArgumentException {
-        if (coordinates==null) throw new IllegalArgumentException("РљРѕРѕСЂРґРёРЅР°С‚С‹ РЅРµ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РїСѓСЃС‚С‹РјРё");
+        if (coordinates==null) throw new IllegalArgumentException("Координаты не должны быть пустыми");
         this.coordinates = coordinates;
     }
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ area
+     * Устанавливает значение поля area
      * @param area
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ area РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * @throws IllegalArgumentException - если значение поля area некорректно
      */
     public void setArea(Integer area) throws IllegalArgumentException {
-        if ((area==null)||(area<0)||(area>745)) throw new IllegalArgumentException("РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ Flat.area");
+        if ((area==null)||(area<0)||(area>745)) throw new IllegalArgumentException("Некорректное значение Flat.area");
         this.area = area;
     }
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ numberOfRooms
+     * Устанавливает значение поля numberOfRooms
      * @param numberOfRooms
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ numberOfRooms РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * @throws IllegalArgumentException - если значение поля numberOfRooms некорректно
      */
     public void setNumberOfRooms(Long numberOfRooms) throws IllegalArgumentException {
-        if ((numberOfRooms==null)||(numberOfRooms<0)) throw new IllegalArgumentException("РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ Flat.numberOfRooms");
+        if ((numberOfRooms==null)||(numberOfRooms<0)) throw new IllegalArgumentException("Некорректное значение Flat.numberOfRooms");
         this.numberOfRooms = numberOfRooms;
     }
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ furnish
+     * Устанавливает значение поля furnish
      * @param furnish
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ furnish РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * @throws IllegalArgumentException - если значение поля furnish некорректно
      */
     public void setFurnish(Furnish furnish) throws IllegalArgumentException {
-        if (furnish==null) throw new IllegalArgumentException("РџРѕР»Рµ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
+        if (furnish==null) throw new IllegalArgumentException("Поле не должно быть пустым");
         this.furnish = furnish;
     }
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ view
+     * Устанавливает значение поля view
      * @param view
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ view РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * @throws IllegalArgumentException - если значение поля view некорректно
      */
     public void setView(View view) throws IllegalArgumentException {
-        if (view==null) throw new IllegalArgumentException("РџРѕР»Рµ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
+        if (view==null) throw new IllegalArgumentException("Поле не должно быть пустым");
         this.view = view;
     }
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ transport
+     * Устанавливает значение поля transport
      * @param transport
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ transport РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * @throws IllegalArgumentException - если значение поля transport некорректно
      */
     public void setTransport(Transport transport) throws IllegalArgumentException {
-        if (transport==null) throw new IllegalArgumentException("РџРѕР»Рµ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
+        if (transport==null) throw new IllegalArgumentException("Поле не должно быть пустым");
         this.transport = transport;
     }
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ house
+     * Устанавливает значение поля house
      * @param house
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ house РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * @throws IllegalArgumentException - если значение поля house некорректно
      */
     public void setHouse(House house) throws IllegalArgumentException {
-        if (house==null) throw new IllegalArgumentException("РџРѕР»Рµ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
+        if (house==null) throw new IllegalArgumentException("Поле не должно быть пустым");
         this.house = house;
     }
 
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ РёС‚РѕРі СЃСЂР°РІРЅРµРЅРёСЏ РѕР±СЉРµРєС‚РѕРІ
-     * @return СЂРµР·СѓСЊС‚Р°С‚ СЃСЂР°РІРЅРµРЅРёСЏ
+     * Возвращает итог сравнения объектов
+     * @return резуьтат сравнения
      */
     @Override
     public int compareTo(Flat o) {
@@ -137,82 +137,82 @@ public class Flat implements Comparable<Flat>{
     }
 
     /**
-     * Р’РѕР·СЂР°С‰Р°РµС‚ id РѕР±СЉРµРєС‚Р°
-     * @return - id РѕР±СЉРµРєС‚Р°
+     * Возращает id объекта
+     * @return - id объекта
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ creationDate РѕР±СЉРµРєС‚Р°
-     * @return creationDate РѕР±СЉРµРєС‚Р°
+     * Возвращает creationDate объекта
+     * @return creationDate объекта
      */
     public ZonedDateTime getCreationDate() {
         return creationDate;
     }
 
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ furnish РѕР±СЉРµРєС‚Р°
-     * @return furnish РѕР±СЉРµРєС‚Р°
+     * Возвращает furnish объекта
+     * @return furnish объекта
      */
     public Furnish getFurnish() {
         return furnish;
     }
 
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ view РѕР±СЉРµРєС‚Р°
-     * @return view РѕР±СЉРµРєС‚Р°
+     * Возвращает view объекта
+     * @return view объекта
      */
     public View getView() {
         return view;
     }
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ name РѕР±СЉРµРєС‚Р°
-     * @return name РѕР±СЉРµРєС‚Р°
+     * Возвращает name объекта
+     * @return name объекта
      */
     public String getName() {
         return name;
     }
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ coordinates РѕР±СЉРµРєС‚Р°
-     * @return coordinates РѕР±СЉРµРєС‚Р°
+     * Возвращает coordinates объекта
+     * @return coordinates объекта
      */
     public Coordinates getCoordinates() {
         return coordinates;
     }
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ area РѕР±СЉРµРєС‚Р°
-     * @return area РѕР±СЉРµРєС‚Р°
+     * Возвращает area объекта
+     * @return area объекта
      */
     public Integer getArea() {
         return area;
     }
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ numberOfRooms РѕР±СЉРµРєС‚Р°
-     * @return numberOfRooms РѕР±СЉРµРєС‚Р°
+     * Возвращает numberOfRooms объекта
+     * @return numberOfRooms объекта
      */
     public Long getNumberOfRooms() {
         return numberOfRooms;
     }
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ transport РѕР±СЉРµРєС‚Р°
-     * @return transport РѕР±СЉРµРєС‚Р°
+     * Возвращает transport объекта
+     * @return transport объекта
      */
     public Transport getTransport() {
         return transport;
     }
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ house РѕР±СЉРµРєС‚Р°
-     * @return house РѕР±СЉРµРєС‚Р°
+     * Возвращает house объекта
+     * @return house объекта
      */
     public House getHouse() {
         return house;
     }
 
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РѕР±СЉРµРєС‚Р° Flat
-     * @return СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РѕР±СЉРµРєС‚Р° Flat
+     * Возвращает строковое представление объекта Flat
+     * @return строковое представление объекта Flat
      */
     @Override
     public String toString() {

@@ -1,37 +1,31 @@
 package Commands;
 
+import CollectionWrappers.CollectionManager;
 import Entities.Flat;
-import Managers.InputManager;
-import Managers.LinkedListManager;
+import Input.BaseInputManager;
 
 import java.util.regex.Matcher;
 
 /**
- * ÐšÐ¾Ð¼Ð°Ð½Ð´Ð° "show" - Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ñ‚ Ð²ÑÐµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñ‹ ÐºÐ¾Ð»Ð»ÐµÐºÑ†Ð¸Ð¸
+ * Êîìàíäà "show" - âûâîäèò âñå ýëåìåíòû êîëëåêöèè
  */
-public class Show extends Command{
+public class Show extends BaseCommand implements CommandWithoutInput{
     /**
-     * ÐŸÑƒÑÑ‚Ð¾Ð¹ ÐºÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€
-     * @see Command
+     * Ïóñòîé êîíñòðóêòîð
+     * @see BaseCommand
      */
     public Show() {
-        super("show","Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ñ‚ Ð²ÑÐµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñ‹ ÐºÐ¾Ð»Ð»ÐµÐºÑ†Ð¸Ð¸","^\s*show\s*$");
+        super("show","âûâîäèò âñå ýëåìåíòû êîëëåêöèè");
     }
-    /**
-     * Ð ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹
-     * @param collection - Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€ ÐºÐ¾Ð»Ð»ÐµÐºÑ†Ð¸Ð¸
-     * @param matcher - Matcher, Ñ Ð¿Ð¾Ð¼Ð¾Ñ‰ÑŒÑŽ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð³Ð¾ Ð¼Ð¾Ð¶Ð½Ð¾ Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚ÑŒ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ñ‹ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹
-     */
+
+
     @Override
-    public void execute(LinkedListManager collection, Matcher matcher) {
-        InputManager m = InputManager.getInstance();
-        if (collection.getList().size()==0){
-            m.print("ÐšÐ¾Ð»Ð»ÐµÐºÑ†Ð¸Ñ Ð¿ÑƒÑÑ‚Ð°Ñ");
+    public void execute(CollectionManager manager, String argument) {
+        if (manager.getList().size()==0){
+            System.out.println("Êîëëåêöèÿ ïóñòàÿ");
         }
         else {
-            collection.getList().stream().forEach((Flat e) -> {
-                m.print(e.toString());
-            });
+            manager.getList().forEach(System.out::println);
         }
     }
 }

@@ -1,57 +1,67 @@
 package Commands;
 
-import Managers.InputManager;
-import Managers.LinkedListManager;
+import CollectionWrappers.CollectionManager;
+import Exceptions.FunctionFailedException;
+import Input.BaseInputManager;
+import Input.InputManager;
+import Input.ScriptInputManager;
+import Managers.CommandManager;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 /**
- * РљР»Р°СЃСЃ РєРѕРјР°РЅРґС‹ РІС‹РїРѕР»РЅРµРЅРёСЏ СЃРєСЂРёРїС‚Р°
+ * Класс команды выполнения скрипта
  */
-public class ExecuteScript extends Command{
+public class ExecuteScript extends BaseCommand implements CommandWithoutInput{
+    static Set<String> executedFiles = new HashSet<>();
+
     /**
-     * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР° РєРѕРјР°РЅРґС‹
-     * @see Command
+     * Конструктор класса команды
+     * @see BaseCommand
      */
     public ExecuteScript() {
-        super("executeScript",
-                "РІС‹РїРѕР»РЅСЏРµС‚ СЃРєСЂРёРїС‚ Р·Р°РїРёСЃР°РЅРЅС‹Р№ РІ С„Р°Р№Р»(РїСѓС‚СЊ РїРµСЂРµРґР°РµС‚СЃСЏ РІ РІРёРґРµ Р°СЂРіСѓРјРµРЅС‚Р° С„СѓРЅРєС†РёРё)",
-                "^\s*execute_script\s+(.+)$");
+        super("execute_script",
+                "выполняет скрипт записанный в файл(путь передается в виде аргумента функции)");
     }
-    /**
-     * РћР±СЂР°Р±РѕС‚С‡РёРє РєРѕРјР°РЅРґС‹
-     * @param collection - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @param matcher - Р°СЂРіСѓРјРµРЅС‚С‹ РєРѕРјР°РЅРґС‹
-     * @throws IllegalArgumentException - РёСЃРєР»СЋС‡РµРЅРёРµ
-     */
+
     @Override
-    public void execute(LinkedListManager collection, Matcher matcher) throws IllegalArgumentException {
+    public void execute(CollectionManager manager, String argument) {
+        File scriptFile = new File(argument.strip());
+
+
+        if (executedFiles.contains(scriptFile.getAbsolutePath())){
+            System.err.println("Вы создали бесконечную рекурсию. Поэтому выполнение прикращается");
+            return;
+        }
+
+        executedFiles.add(scriptFile.getAbsolutePath());
+        CommandManager scriptCommandManager = null;
 
         try {
-            String argument = matcher.group(1).strip();
-            InputManager.setРЎustomStreams(new FileInputStream(matcher.group(1).strip()),
-                    System.out,
-                    System.err);
-            InputManager.setSilent(true);
-            boolean exit = false;
-            while (!exit) {
-                exit = collection.handle(InputManager.getInstance().readCommand(collection.getCommands()));
-            }
-            InputManager.getInstance().print("РЎРєСЂРёРїС‚ РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ");
+
+            scriptCommandManager = new CommandManager(manager,
+                    new ScriptInputManager(new FileInputStream(scriptFile)));
         } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("РЈРєР°Р·Р°РЅС‹Р№ С„Р°Р№Р» РѕС‚СЃСѓС‚СЃРІСѓРµС‚");
-        }catch (NullPointerException e){
-            //do nothing;
-        }catch (Throwable e) {
-            InputManager.getInstance().printError(new Throwable("РћС€РёР±РєР° РІРѕ РІСЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёСЏ СЃРєСЂРёРїС‚Р° "));
+            throw new IllegalArgumentException("Некорректный путь к файлу");
         }
-        finally {
-            InputManager.setРЎustomStreams(System.in,
-                    System.out,
-                    System.err);
-            InputManager.setSilent(false);
+        boolean noExceptionsThrown = true;
+        boolean exit = false;
+        while (!exit){
+            try {
+                exit = scriptCommandManager.handle();
+            }catch (FunctionFailedException e){
+                noExceptionsThrown = false;
+                System.err.println(e.getMessage());
+                exit = true;
+            }
         }
+        if (noExceptionsThrown) System.out.printf("Скрипт %s выполнен успешно\n",scriptFile.getName());
+        executedFiles.remove(scriptFile.getAbsolutePath());
     }
 }

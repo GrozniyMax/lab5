@@ -1,10 +1,14 @@
+import CollectionWrappers.CollectionManager;
+import CollectionWrappers.MyCollection;
 import Entities.Flat;
-import Managers.InputManager;
+import Exceptions.EndOfStreamException;
+import Exceptions.FunctionFailedException;
+import Input.BaseInputManager;
+import Input.ConsoleInputManager;
+import Managers.CommandManager;
 import Managers.JsonManager;
-import Managers.LinkedListManager;
 
 import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -13,47 +17,46 @@ import java.util.Objects;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     /**
-     * РўРѕС‡РєР° РІС…РѕРґР° РІ РїСЂРѕРіСЂР°РјРјСѓ
-     * @param args - Р°СЂРіСѓРјРµРЅС‚С‹ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё
+     * Точка входа в программу
+     * @param args - аргументы командной строки
      */
     public static void main(String[] args) {
+        System.setErr(System.out);
 
         String fileName = null;
         try {
             fileName = Objects.requireNonNull(System.getenv("collectionFileName"));
         } catch (Throwable e){
-            InputManager.getInstance().print("Р§С‚Рѕ-С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє РёР·РІР»РµС‡РµРЅРёРµРј РїСѓС‚Рё Рє С„Р°Р№Р»Сѓ. Р‘СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ ~/dumping.json");
+            System.err.println("Что-то пошло не так извлечением пути к файлу. Будет использоваться ~/dumping.json");
             fileName = "dumping.json";
         }
 
-        //РџСЂРёРІРѕРґРёРј РїСѓС‚СЊ Рє Р°Р±СЃРѕР»СЋС‚РЅРѕРјСѓ РІРёРґСѓ
+        //Приводим путь к абсолютному виду
         fileName = FileSystems.getDefault().getPath(fileName).normalize().toAbsolutePath().toString();
         JsonManager.setFilePath(fileName);
-        LinkedListManager manager=new LinkedListManager(new LinkedList<Flat>(), ZonedDateTime.now());
+        MyCollection collection=new MyCollection(new LinkedList<Flat>(), ZonedDateTime.now());
         try {
-             manager = JsonManager.load();
+             collection = JsonManager.load();
         } catch (IllegalArgumentException e) {
-            System.err.println("Р’ СѓРєР°Р·Р°РЅРѕРј С„Р°Р№Р»Рµ РІ JSON РµСЃС‚СЊ РѕС€РёР±РєР°");
+            System.err.println("В указаном файле в JSON есть ошибка");
         }
         catch (Throwable e){
-            System.out.println("РџРѕСЃРєРѕР»СЊРєСѓ С‡С‚Рѕ-С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє, Сѓ РЅР°СЃ РЅРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ СЂР°СЃРїР°СЂСЃРёС‚СЊ РєРѕР»Р»РµРєС†РёСЋ");
+            System.out.println("Поскольку что-то пошло не так, у нас не получилось распарсить коллекцию");
         }
         finally {
-            runApp(manager);
+            runApp(new CommandManager(new CollectionManager(collection), ConsoleInputManager.getInstance()));
         }
     }
-    /**
-     * Р—Р°РїСѓСЃРє РїСЂРѕРіСЂР°РјРјС‹
-     * @param linkedListManager - РѕР±СЂР°Р±РѕС‚С‡РёРє РєРѕРјР°РЅРґ
-     */
-    public static void runApp(LinkedListManager linkedListManager){
+
+    public static void runApp(CommandManager commandManager){
         boolean exit = false;
-        InputManager manager = InputManager.getInstance();
         while (!exit){
             try {
-                exit = linkedListManager.handle(manager.readCommand(linkedListManager.getCommands()));
-            }catch (IllegalArgumentException e){
-                InputManager.getInstance().printError(e);
+                exit = commandManager.handle();
+            }catch (FunctionFailedException e){
+                System.err.println(e.getMessage());
+            }catch (EndOfStreamException e){
+                exit=true;
             }
         }
     }

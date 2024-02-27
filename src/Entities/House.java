@@ -1,43 +1,43 @@
 package Entities;
 
 /**
- * РљР»Р°СЃСЃ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РѕР±СЉРµРєС‚Р° С‚РёРїР° House
+ * Класс для хранения объекта типа House
  */
 public class House {
 
-    private String name; //РџРѕР»Рµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
-    private Integer year; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null, Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 0
-    private int numberOfFloors; //Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 0
+    private String name; //Поле может быть null
+    private Integer year; //Поле не может быть null, Значение поля должно быть больше 0
+    private int numberOfFloors; //Значение поля должно быть больше 0
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ name
-     * @param name - Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ name
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ name РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * Устанавливает значение поля name
+     * @param name - значение поля name
+     * @throws IllegalArgumentException - если значение поля name некорректно
      */
     public void setName(String name) throws IllegalArgumentException {
-        if ((name==null)||(name.equals(""))) throw new IllegalArgumentException("РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ House.name. РћРЅРѕ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
+        if ((name==null)||(name.equals(""))) throw new IllegalArgumentException("Некорректное значение House.name. Оно не должно быть пустым");
         this.name = name;
     }
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ year
-     * @param year - Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ year
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ year РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * Устанавливает значение поля year
+     * @param year - значение поля year
+     * @throws IllegalArgumentException - если значение поля year некорректно
      */
     public void setYear(Integer year) throws IllegalArgumentException {
-        if ((year==null)||(year<0)) throw new IllegalArgumentException("РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ House.year");
+        if ((year==null)||(year<0)) throw new IllegalArgumentException("Некорректное значение House.year");
         this.year = year;
     }
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ numberOfFloors
-     * @param numberOfFloors - Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ numberOfFloors
-     * @throws IllegalArgumentException - РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ numberOfFloors РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ
+     * Устанавливает значение поля numberOfFloors
+     * @param numberOfFloors - значение поля numberOfFloors
+     * @throws IllegalArgumentException - если значение поля numberOfFloors некорректно
      */
     public void setNumberOfFloors(int numberOfFloors) throws IllegalArgumentException {
-        if (numberOfFloors < 0) throw new IllegalArgumentException("РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ House.numberOfFloors");
+        if (numberOfFloors < 0) throw new IllegalArgumentException("Некорректное значение House.numberOfFloors");
         this.numberOfFloors = numberOfFloors;
     }
     /**
-     * Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РѕР±СЉРµРєС‚Р° House
-     * @return СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РѕР±СЉРµРєС‚Р° House
+     * Возвращает строковое представление объекта House
+     * @return строковое представление объекта House
      */
     @Override
     public String toString() {

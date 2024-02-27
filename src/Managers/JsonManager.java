@@ -1,5 +1,6 @@
 package Managers;
 
+import CollectionWrappers.MyCollection;
 import Entities.*;
 import com.google.gson.Gson;
 
@@ -16,16 +17,16 @@ public final class JsonManager {
 
 
     /**
-     * РљР»Р°СЃСЃ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РјРµРЅРµРґР¶РµСЂР° РІ JSON-С„Р°Р№Р»
+     * Класс для сохранения менеджера в JSON-файл
      */
-    private static class ManagerAdapter{
+    private static class MyCollectionAdapter{
         LinkedList<FlatParams> list;
         public Date creationTime;
         /**
-         * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РѕР±СЉРµРєС‚Р° РёР· РѕР±СЉРµРєС‚Р° РєР»Р°СЃСЃР° Managers.LinkedListManager
-         * @param manager - РѕР±СЉРµРєС‚ РєР»Р°СЃСЃР° Managers.LinkedListManager
+         * Конструктор для создания объекта из объекта класса Managers.CollectionManager
+         * @param manager - объект класса Managers.CollectionManager
          */
-        public ManagerAdapter(LinkedListManager manager) {
+        public MyCollectionAdapter(MyCollection manager) {
             this.list = new LinkedList<>();
             this.creationTime = Date.from(manager.creationDate.toInstant());
             for (Flat f :
@@ -37,23 +38,23 @@ public final class JsonManager {
 
 
     /**
-     * РљР»Р°СЃСЃ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РєРѕР»Р»РµРєС†РёРё РІ JSON-С„Р°Р№Р»
+     * Класс для сохранения коллекции в JSON-файл
      */
     private static class FlatParams{
-        public String name; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null, РЎС‚СЂРѕРєР° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚РѕР№
-        public Coordinates coordinates; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
+        public String name; //Поле не может быть null, Строка не может быть пустой
+        public Coordinates coordinates; //Поле не может быть null
         public Date creationDate;
-        public Integer area; //РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ: 745, Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 0
-        public Long numberOfRooms; //Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 0
-        public Furnish furnish; //РџРѕР»Рµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
-        public View view; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
-        public Transport transport; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
-        public House house; //РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
+        public Integer area; //Максимальное значение поля: 745, Значение поля должно быть больше 0
+        public Long numberOfRooms; //Значение поля должно быть больше 0
+        public Furnish furnish; //Поле может быть null
+        public View view; //Поле не может быть null
+        public Transport transport; //Поле не может быть null
+        public House house; //Поле не может быть null
 
 
         /**
-         * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РѕР±СЉРµРєС‚Р° РёР· РѕР±СЉРµРєС‚Р° РєР»Р°СЃСЃР° Flat
-         * @param copyFrom - РѕР±СЉРµРєС‚ РєР»Р°СЃСЃР° Flat
+         * Конструктор для создания объекта из объекта класса Flat
+         * @param copyFrom - объект класса Flat
          */
         public FlatParams(Flat copyFrom) {
             this.name = copyFrom.getName();
@@ -70,20 +71,16 @@ public final class JsonManager {
 
 
     /**
-     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
-     * @param filePath1 - РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
+     * Устанавливает путь к файлу
+     * @param filePath1 - путь к файлу
      */
     public static void setFilePath(String filePath1){
         filePath = filePath1;
     }
 
-    /**
-     * РЎРѕС…СЂР°РЅСЏРµС‚ РєРѕР»Р»РµРєС†РёСЋ РІ JSON-С„Р°Р№Р»
-     * @param manager - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @throws FileNotFoundException - РµСЃР»Рё С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ
-     */
-    public static void dump(LinkedListManager manager) throws FileNotFoundException {
-        ManagerAdapter managerAdapter = new ManagerAdapter(manager);
+
+    public static void dump(MyCollection collection) throws FileNotFoundException {
+        MyCollectionAdapter managerAdapter = new MyCollectionAdapter(collection);
         OutputStreamWriter writer = null;
         Gson g = new Gson();
         String file = g.toJson(managerAdapter);
@@ -92,11 +89,11 @@ public final class JsonManager {
             writer.write(file);
 
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("РџСЂРѕРіСЂР°РјРјРёСЃС‚ РґР°СѓРЅ");
+            throw new RuntimeException("Программист даун");
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("РЈРєР°Р·Р°РЅС‹Р№ С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ");
+            throw new FileNotFoundException("Указаный файл не найден");
         } catch (IOException e) {
-            throw new RuntimeException("РќРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ СЃРѕС…СЂР°РЅРёС‚СЊ РєРѕР»Р»РµРєС†РёСЋ РІ JSON-С„Р°Р№Р»");
+            throw new RuntimeException("Не получилось сохранить коллекцию в JSON-файл");
         }
         finally {
             try {
@@ -107,11 +104,11 @@ public final class JsonManager {
         }
     }
     /**
-     * Р—Р°РіСЂСѓР¶Р°РµС‚ РјРµРЅРµРґР¶РµСЂР° РёР· JSON-С„Р°Р№Р»Р°
-     * @return - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @throws IllegalArgumentException - РµСЃР»Рё С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ
+     * Загружает менеджера из JSON-файла
+     * @return - менеджер коллекции
+     * @throws IllegalArgumentException - если файл не найден
      */
-    public static LinkedListManager load() throws IllegalArgumentException, IOException {
+    public static MyCollection load() throws IllegalArgumentException, IOException {
 
         StringBuilder lines = new StringBuilder();
         ZonedDateTime resultTime;
@@ -124,11 +121,7 @@ public final class JsonManager {
                     break;
                 lines.append(line.replace("\n",""));
             }
-
-
-
-
-        ManagerAdapter adapter= new Gson().fromJson(lines.toString(),ManagerAdapter.class);
+        MyCollectionAdapter adapter= new Gson().fromJson(lines.toString(),MyCollectionAdapter.class);
         LinkedList<Flat> list = new LinkedList<>();
         long currentId=0;
         for (int i=0;i<adapter.list.size();i++) {
@@ -148,10 +141,10 @@ public final class JsonManager {
                 currentId++;
                 list.add(f);
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Р’ РїСЂРѕС†РµСЃСЃРµ РѕР±СЂР°Р±РѕС‚РєРё С„Р°Р№Р»Р° РІРѕР·РЅРёРєР»Р° РѕС€РёР±РєР° РІ РѕР±СЉРµРєС‚Рµ "+ i + ":" + e.getMessage());
+                throw new IllegalArgumentException("В процессе обработки файла возникла ошибка в объекте "+ i + ":" + e.getMessage());
             }
         }
-        return new LinkedListManager(list,ZonedDateTime.ofInstant(adapter.creationTime.toInstant(),ZoneId.systemDefault()));
+        return new MyCollection(list,ZonedDateTime.ofInstant(adapter.creationTime.toInstant(),ZoneId.systemDefault()));
 
 
     }

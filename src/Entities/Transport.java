@@ -1,7 +1,7 @@
 package Entities;
 
 /**
- * РџРµСЂРµС‡РёСЃР»РµРЅРёРµ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РѕР±СЉРµРєС‚Р° С‚РёРїР° Transport
+ * Перечисление для хранения объекта типа Transport
  */
 public enum Transport {
     NONE,

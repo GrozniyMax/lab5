@@ -1,7 +1,7 @@
 package Entities;
 
 /**
- * РџРµСЂРµС‡РёСЃР»РµРЅРёРµ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РѕР±СЉРµРєС‚Р° С‚РёРїР° Furnish
+ * Перечисление для хранения объекта типа Furnish
  */
 public enum Furnish implements Comparable<Furnish>{
     DESIGNER,

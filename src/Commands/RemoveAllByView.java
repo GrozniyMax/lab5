@@ -1,40 +1,33 @@
 package Commands;
 
+import CollectionWrappers.CollectionManager;
 import Entities.Flat;
 import Entities.View;
-import Managers.LinkedListManager;
 
 import java.util.regex.Matcher;
 
 /**
- * ÐšÐ¾Ð¼Ð°Ð½Ð´Ð° "remove_all_by_view" ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ñ Ð²ÑÐµÑ… ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð², Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ñ view ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ñ… ÑÐºÐ²Ð¸Ð²Ð°Ð»ÐµÐ½Ñ‚Ð½Ð¾ Ð²Ð²ÐµÐ´ÐµÐ½Ð½Ð¾Ð¼Ñƒ
+ * Êîìàíäà "remove_all_by_view" óäàëåíèÿ âñåõ ýëåìåíòîâ, çíà÷åíèå ïîëÿ view êîòîðûõ ýêâèâàëåíòíî ââåäåííîìó
  */
-public class RemoveAllByView extends Command{
+public class RemoveAllByView extends BaseCommand implements CommandWithoutInput{
 
     /**
-     * ÐŸÑƒÑÑ‚Ð¾Ð¹ ÐºÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€
-     * @see Command
+     * Ïóñòîé êîíñòðóêòîð
+     * @see BaseCommand
      */
     public RemoveAllByView() {
         super("remove_all_by_view",
-                "ÑƒÐ´Ð°Ð»ÑÐµÑ‚ Ð²ÑÐµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñ‹, view Ð¾Ñ‚Ð¾Ñ€Ñ‹Ñ… ÑÐ¾Ð²Ð¿Ð°Ð´Ð°ÐµÑ‚ Ñ Ð²Ð²ÐµÐ´ÐµÐ½Ð½Ñ‹Ð¼",
-                "^\s*remove_all_by_view\s+(.+)$");
+                "óäàëÿåò âñå ýëåìåíòû, view îòîðûõ ñîâïàäàåò ñ ââåäåííûì");
     }
 
 
-    /**
-     * Ð ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹
-     * @param collection - Ð¼ÐµÐ½ÐµÐ´Ð¶ÐµÑ€ ÐºÐ¾Ð»Ð»ÐµÐºÑ†Ð¸Ð¸
-     * @param matcher - Matcher ÑÐ³Ñ€ÑƒÐ¿Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ð¼ Ð¿Ð¾ ÑˆÐ°Ð±Ð»Ð¾Ð½Ñƒ
-     * @throws IllegalArgumentException - ÐµÑÐ»Ð¸ Ð²Ð²ÐµÐ´ÐµÐ½Ð½Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚
-     */
     @Override
-    public void execute(LinkedListManager collection, Matcher matcher) throws IllegalArgumentException{
-        View view = View.valueOf(matcher.group(1).strip().toUpperCase());
+    public void execute(CollectionManager manager, String argument) {
+        View view = View.valueOf(argument.strip().toUpperCase());
 
-        collection.getList().removeIf((Flat colObj)->colObj.getView().equals(view));
-        for (int i = 0; i < collection.getList().size(); i++) {
-            collection.getList().get(i).setId(Long.valueOf(i));
+        manager.getList().removeIf((Flat colObj)->colObj.getView().equals(view));
+        for (int i = 0; i < manager.getList().size(); i++) {
+            manager.getList().get(i).setId(Long.valueOf(i));
         }
     }
 }

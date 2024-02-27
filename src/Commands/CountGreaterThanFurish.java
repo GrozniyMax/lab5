@@ -1,42 +1,34 @@
 package Commands;
 
+import CollectionWrappers.CollectionManager;
 import Entities.Flat;
 import Entities.Furnish;
-import Managers.InputManager;
-import Managers.LinkedListManager;
+import Input.BaseInputManager;
 
 import java.util.regex.Matcher;
 
 /**
- * РљРѕРјР°РЅРґР° "count_greater_than_furish"
+ * Команда "count_greater_than_furish"
  */
-public class CountGreaterThanFurish extends Command{
+public class CountGreaterThanFurish extends BaseCommand implements CommandWithoutInput{
     /**
-     * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРјР°РЅРґС‹
-     * @see Command
+     * Конструктор команды
+     * @see BaseCommand
      */
     public CountGreaterThanFurish() {
         super("count_greater_than_furish",
-                "СЃС‡РёС‚Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ, РїРѕР»Рµ Furish РєРѕС‚РѕСЂС‹С… Р±РѕР»СЊС€Рµ РІРІРµРґРµРЅРЅРѕРіРѕ",
-                "^\s*count_greater_than_furish\s+(.+)$");
+                "считает количество элементов, поле Furish которых больше введенного");
     }
-    /**
-     * Р’С‹РїРѕР»РЅРµРЅРёРµ РєРѕРјР°РЅРґС‹
-     * @param collection - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @param matcher - Matcher
-     * @throws IllegalArgumentException - РµСЃР»Рё РІРІРµРґРµРЅ РЅРµРІРµСЂРЅС‹Р№ Р°СЂРіСѓРјРµРЅС‚
-     */
+
     @Override
-    public void execute(LinkedListManager collection, Matcher matcher) throws IllegalArgumentException{
-        Furnish furish = Furnish.valueOf(matcher.group(1).strip().toUpperCase());
-
+    public void execute(CollectionManager manager, String argument) {
+        Furnish furish = Furnish.valueOf(argument.toUpperCase());
         long counter=0;
-
-        for (Flat f : collection.getList() ) {
+        for (Flat f : manager.getList() ) {
             if (f.getFurnish().compareTo(furish)>0){
                 counter++;
             }
         }
-        InputManager.getInstance().print("РљРѕР»РёС‡РµСЃС‚РІРѕ РѕР±СЉРµРєС‚РѕРІ СЃ С‚Р°РєРёРј РїРѕР»РµРј Furish " + counter);
+        System.out.println("Количество объектов с таким полем Furish " + counter);
     }
 }

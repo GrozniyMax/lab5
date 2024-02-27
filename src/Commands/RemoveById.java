@@ -1,41 +1,35 @@
 package Commands;
 
-import Managers.LinkedListManager;
+import CollectionWrappers.CollectionManager;
 
 import java.util.regex.Matcher;
 
 
 /**
- * РљРѕРјР°РЅРґР° "remove_by_id". РЈРґР°Р»СЏРµС‚ СЌР»РµРјРµРЅС‚ РёР· РєРѕР»Р»РµРєС†РёРё РїРѕ РµРіРѕ id.
+ * Команда "remove_by_id". Удаляет элемент из коллекции по его id.
  */
-public class RemoveById extends Command{
+public class RemoveById extends BaseCommand implements CommandWithoutInput{
     /**
-     * РџСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
-     * @see Command
+     * Пустой конструктор
+     * @see BaseCommand
      */
     public RemoveById() {
-        super("remove_by_id","СѓРґР°Р»СЏРµС‚ РѕР±СЉРµРєС‚ РїРѕ id","^\s*remove_by_id\s+(\\d+)$");
+        super("remove_by_id","удаляет объект по id");
     }
 
-    /**
-     * РЈРґР°Р»СЏРµС‚ СЌР»РµРјРµРЅС‚ РёР· РєРѕР»Р»РµРєС†РёРё РїРѕ РµРіРѕ id.
-     * @param collection - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @param matcher - Matcher, РєРѕС‚РѕСЂС‹Р№ СЃРѕРґРµСЂР¶РёС‚ id СЌР»РµРјРµРЅС‚Р°
-     * @throws IllegalArgumentException - РµСЃР»Рё id РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Р№
-     */
+
     @Override
-    public void execute(LinkedListManager collection, Matcher matcher) throws IllegalArgumentException{
+    public void execute(CollectionManager manager, String argument) {
         try {
-            Integer id = Integer.parseInt(matcher.group(1).strip());
-            collection.getList().remove(id);
-            for (int i = 0; i < collection.getList().size(); i++) {
-                collection.getList().get(i).setId(Long.valueOf(i));
+            Integer id = Integer.parseInt(argument.strip());
+            manager.getList().remove(id);
+            for (int i = 0; i < manager.getList().size(); i++) {
+                manager.getList().get(i).setId(Long.valueOf(i));
             }
         } catch (IndexOutOfBoundsException e) {
-            if (e.getMessage().contains("No group")) throw new IllegalArgumentException("РќРµРєРѕСЂСЂРµРєС‚РЅРѕ РІРІРµРґРµРЅРЅС‹Р№ id");
-            throw new IllegalArgumentException("id Р±РѕР»СЊС€Рµ С‡РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РјР°СЃСЃРёРІР°");
-        }catch (NumberFormatException|IllegalStateException e){
-            throw new IllegalArgumentException("РќРµРєРѕСЂСЂРµРєС‚РЅРѕ РІРІРµРґРµРЅРЅС‹Р№ id");
+            throw new IllegalArgumentException("id больше чем количество элементов массива");
+        }catch (NumberFormatException e){
+            throw new IllegalArgumentException("Некорректно введенный id");
         }
     }
 }

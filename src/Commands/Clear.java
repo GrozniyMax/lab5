@@ -1,29 +1,25 @@
 package Commands;
 
-import Managers.LinkedListManager;
+import CollectionWrappers.CollectionManager;
 
 import java.util.regex.Matcher;
 
 /**
- * РљРѕРјР°РЅРґР° РѕС‡РёСЃС‚РєРё РєРѕР»Р»РµРєС†РёРё
+ * Команда очистки коллекции
  */
-public class Clear extends Command{
+public class Clear extends BaseCommand implements CommandWithoutInput{
     /**
-     * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р±РµР· РїР°СЂР°РјРµС‚СЂРѕРІ
-     * @see Command
+     * Конструктор без параметров
+     * @see BaseCommand
      */
     public Clear() {
         super("clear",
-                "РѕС‡РёС€С‰Р°РµС‚ РєРѕР»Р»РµРєС†РёСЋ",
-                "^\s*clear\s*$");
+                "очишщает коллекцию");
     }
-    /**
-     * Р’С‹РїРѕР»РЅРµРЅРёРµ РєРѕРјР°РЅРґС‹
-     * @param collection - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @param matcher - РѕР±СЉРµРєС‚ РєР»Р°СЃСЃР° Matcher
-     */
+
+
     @Override
-    public void execute(LinkedListManager collection, Matcher matcher) {
-        collection.getList().clear();
+    public void execute(CollectionManager manager, String argument) {
+        manager.getList().clear();
     }
 }

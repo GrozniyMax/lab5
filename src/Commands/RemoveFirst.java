@@ -1,32 +1,27 @@
 package Commands;
 
-import Managers.LinkedListManager;
+import CollectionWrappers.CollectionManager;
 
 import java.util.regex.Matcher;
 
 /**
- * РљРѕРјР°РЅРґР° "remove_first". РЈРґР°Р»СЏРµС‚ РїРµСЂРІС‹Р№ СЌР»РµРјРµРЅС‚.
+ * Команда "remove_first". Удаляет первый элемент.
  */
-public class RemoveFirst extends Command{
+public class RemoveFirst extends BaseCommand implements CommandWithoutInput{
     /**
-     * РџСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
-     * @see Command
+     * Пустой конструктор
+     * @see BaseCommand
      */
     public RemoveFirst() {
         super("remove_first",
-                "СѓРґР°Р»СЏРµС‚ РїРµСЂРІС‹Р№ СЌР»РµРјРµРЅС‚",
-                "^\s*remove_first\s*$" );
+                "удаляет первый элемент");
     }
-    /**
-     * Р РµР°Р»РёР·Р°С†РёСЏ РєРѕРјР°РЅРґС‹
-     * @param collection - РјРµРЅРµРґР¶РµСЂ РєРѕР»Р»РµРєС†РёРё
-     * @param matcher - Matcher, РєРѕС‚РѕСЂС‹Р№ СЃРѕРґРµСЂР¶РёС‚ id СЌР»РµРјРµРЅС‚Р°
-     */
+
     @Override
-    public void execute(LinkedListManager collection, Matcher matcher) {
-        collection.getList().removeFirst();
-        for (int i = 0; i < collection.getList().size(); i++) {
-            collection.getList().get(i).setId(Long.valueOf(i));
+    public void execute(CollectionManager manager, String argument) {
+        manager.getList().remove(0);
+        for (int i = 0; i < manager.getList().size(); i++) {
+            manager.getList().get(i).setId((long) i);
         }
     }
 }
