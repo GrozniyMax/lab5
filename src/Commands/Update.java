@@ -1,16 +1,16 @@
 package Commands;
 
 /**
- * РљРѕРјР°РЅРґР° "update". РћР±РЅРѕРІР»СЏРµС‚ РґР°РЅРЅС‹Рµ СЌР»РµРјРµРЅС‚Р° РєРѕР»Р»РµРєС†РёРё РїРѕ id
+ * Команда "update". Обновляет данные элемента коллекции по id
  */
 public class Update extends BaseCommand {
     /**
-     * РџСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+     * Пустой конструктор
      * @see BaseCommand
      */
     public Update() {
         super("update",
-                "РѕР±РЅРѕРІР»СЏРµС‚ РґР°РЅРЅС‹Рµ СЌР»РµРјРµРЅС‚Р° РєРѕР»Р»РµРєС†РёРё РїРѕ id");
+                "обновляет данные элемента коллекции по id");
     }
 
     @Override
@@ -25,9 +25,9 @@ public class Update extends BaseCommand {
             parametresBundle.collectionManager().getList().set( id,
                     parametresBundle.reader().readFlat());
         } catch ( NumberFormatException e){
-            throw new IllegalArgumentException("РќРµРєРѕСЂСЂРµРєС‚РЅРѕ РІРІРµРґРµРЅРЅС‹Р№ id");
+            throw new IllegalArgumentException("Некорректно введенный id");
         } catch (IndexOutOfBoundsException e) {
-            throw new IllegalArgumentException(" РЈРєР°Р·Р°РЅРЅС‹Р№ id Р±РѕР»СЊС€Рµ С‡РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РјР°СЃСЃРёРІР°");
+            throw new IllegalArgumentException(" Указанный id больше чем количество элементов массива");
         }
     }
 }
