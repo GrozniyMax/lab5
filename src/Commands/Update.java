@@ -13,11 +13,17 @@ public class Update extends BaseCommand {
                 "обновляет данные элемента коллекции по id");
     }
 
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.ALL;
     }
 
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
         try {

@@ -17,11 +17,17 @@ public class Help extends BaseCommand {
         super("help","Выводит правку по доступным командам");
     }
 
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.COMMANDS;
     }
 
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
         System.out.println("ОЧЕНЬ ВАЖНО: Вводить поля Flat в следующем порядке: name, coordinates, area, numberOfRooms, furnish, view, transport, house");

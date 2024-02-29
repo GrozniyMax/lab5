@@ -17,12 +17,17 @@ public class RemoveFirst extends BaseCommand{
                 "удаляет первый элемент");
     }
 
-
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.COLLECTION_ONLY;
     }
 
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
         parametresBundle.collectionManager().getList().remove(0);

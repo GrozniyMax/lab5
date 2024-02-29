@@ -15,13 +15,17 @@ public class Clear extends BaseCommand {
         super("clear",
                 "очишщает коллекцию");
     }
-
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.COLLECTION_ONLY;
     }
 
-
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
         parametresBundle.collectionManager().getList().clear();

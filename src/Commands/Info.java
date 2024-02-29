@@ -12,11 +12,17 @@ public class Info extends BaseCommand {
         super("info","выводит информацию о коллекции");
     }
 
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.COLLECTION_ONLY;
     }
 
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
         System.out.println("ƒј“ј —ќ«ƒјЌ»я: "+ parametresBundle.collectionManager().getCollection().creationDate.toString());

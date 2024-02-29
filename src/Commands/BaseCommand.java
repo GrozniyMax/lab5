@@ -1,11 +1,11 @@
 package Commands;
 
 /**
- * Абстрактный класс команды
+ * Базовый класс команды
  * @author Максим Тараненко
  */
 public abstract class BaseCommand implements Command{
-    //TODO Переписать команды на самостоятельный парсинг аргумента без RegExp
+
 
 
     /**
@@ -18,6 +18,10 @@ public abstract class BaseCommand implements Command{
     private final String name;
 
 
+    /**
+     * @param name
+     * @param description
+     */
     protected BaseCommand(String name, String description) {
         this.name = name;
         this.description = description;

@@ -17,11 +17,17 @@ public class RemoveLower extends BaseCommand {
                 "удаляет все элементы меньше заявленного");
     }
 
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.ALL;
     }
 
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
         Flat compareObject = parametresBundle.reader().readFlat();

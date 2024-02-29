@@ -17,11 +17,17 @@ public class RemoveById extends BaseCommand {
         super("remove_by_id","удаляет объект по id");
     }
 
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.ARGUMENT;
     }
 
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
 

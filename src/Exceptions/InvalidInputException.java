@@ -1,5 +1,8 @@
 package Exceptions;
 
+/**
+ * Исключение, выбрасываемое при некорректном вводе
+ */
 public class InvalidInputException extends RuntimeException{
 
     public InvalidInputException() {

@@ -11,9 +11,10 @@ import java.util.HashMap;
 
 import java.util.Map;
 
+/**
+ * Класс для управления командами
+ */
 public class CommandManager {
-    //TODO прописать handle для одной команды и бесконечного количества команд
-    //TODO указать InputManager как поле CommandManagera
     CollectionManager collectionManager;
     InputManager inputManager;
 
@@ -39,23 +40,42 @@ public class CommandManager {
         register(new Update());
     }
 
+    /**
+     * Регистрирует команду
+     * @param newCommand - команда
+     */
     public void register(Command newCommand){
         commands.put(newCommand.getName(),newCommand);
     }
 
 
-
+    /**
+     * Конструктор
+     * @param collectionManager - менеджер коллекции
+     * @param inputManager - менеджер ввода
+     */
     public CommandManager(CollectionManager collectionManager, InputManager inputManager) {
         this.collectionManager = collectionManager;
         this.inputManager = inputManager;
     }
 
+    /**
+     * Конструктор
+     * @param collectionManager - менеджер коллекции
+     * @param inputManager - менеджер ввода
+     * @param commands - список команд
+     */
     public CommandManager(CollectionManager collectionManager, InputManager inputManager, Map<String, Command> commands) {
         this.collectionManager = collectionManager;
         this.inputManager = inputManager;
         this.commands = commands;
     }
 
+    /**
+     * Обрабатывает команду
+     * @return true если нужно завершить работу
+     * @throws FunctionFailedException если функция завершилась с ошибкой
+     */
     public boolean handle() throws FunctionFailedException {
         try {
             String line = inputManager.readLine();

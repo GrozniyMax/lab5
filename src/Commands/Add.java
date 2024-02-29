@@ -18,11 +18,17 @@ public class Add extends BaseCommand {
     }
 
 
-
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.READER;
     }
+
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     public void execute(ParametresBundle parametresBundle) throws IllegalArgumentException{
         Flat object = parametresBundle.reader().readFlat();
         object.setId((long) parametresBundle.collectionManager().getList().size());

@@ -19,13 +19,17 @@ public class CountGreaterThanFurish extends BaseCommand{
         super("count_greater_than_furish",
                 "считает количество элементов, поле Furish которых больше введенного");
     }
-
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.ARGUMENT;
     }
 
-
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
         try {

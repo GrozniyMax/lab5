@@ -8,15 +8,26 @@ import Utils.Pair;
 import java.io.EOFException;
 import java.io.InputStream;
 
+/**
+ * Класс для управления вводом из скрипта
+ * Реализует интерфейс InputManager
+ */
 public class ScriptInputManager extends BaseInputManager implements InputManager{
-    //TODO протестировать на незаконченном вводе при команде  add
 
+    /**
+     * Конструктор
+     * @param readFrom - поток ввода
+     */
     public ScriptInputManager(InputStream readFrom) {
         super(readFrom);
     }
 
 
-
+    /**
+     * Читает координаты из консоли
+     * @return Coordinates - прочтенные координаты
+     * @throws EndOfStreamException если конец потока
+     */
     public Coordinates readCoordinates() throws InvalidInputException{
         try {
             String[] values = this.readLine().strip().split(" +");
@@ -30,7 +41,11 @@ public class ScriptInputManager extends BaseInputManager implements InputManager
         }
     }
 
-
+    /**
+     * Читает Furnish из консоли
+     * @return Furnish - прочтенный Furnish
+     * @throws EndOfStreamException если конец потока
+     */
     public Furnish readFurnish() throws InvalidInputException{
         try {
             return Furnish.valueOf(this.readLine().strip());
@@ -40,7 +55,11 @@ public class ScriptInputManager extends BaseInputManager implements InputManager
     }
 
 
-
+    /**
+     * Читает View из консоли
+     * @return View - прочтенный View
+     * @throws InvalidInputException если некорректный ввод
+     */
     public View readView() throws InvalidInputException{
         try {
             return View.valueOf(this.readLine().strip());
@@ -49,7 +68,11 @@ public class ScriptInputManager extends BaseInputManager implements InputManager
         }
     }
 
-
+    /**
+     * Читает House из консоли
+     * @return House - прочтенный House
+     * @throws InvalidInputException если некорректный ввод
+     */
     public House readHouse()throws InvalidInputException{
         try {
             House object = new House();
@@ -62,7 +85,11 @@ public class ScriptInputManager extends BaseInputManager implements InputManager
         }
     }
 
-
+    /**
+     * Читает Transport из консоли
+     * @return прочитанный Transport
+     * @throws InvalidInputException если некорректный ввод
+     */
     public Transport readTransport() throws InvalidInputException{
         try {
             return Transport.valueOf(this.readLine().strip());
@@ -71,7 +98,11 @@ public class ScriptInputManager extends BaseInputManager implements InputManager
         }
     }
 
-
+    /**
+     * Читает Flat из консоли
+     * @return прочитанный Flat
+     * @throws InvalidInputException если некорректный ввод
+     */
     public Flat readFlat() throws InvalidInputException{
         try {
             Flat object = new Flat();

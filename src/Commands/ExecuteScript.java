@@ -29,12 +29,16 @@ public class ExecuteScript extends BaseCommand{
         super("execute_script",
                 "выполняет скрипт записанный в файл(путь передается в виде аргумента функции)");
     }
-
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.ARGUMENT;
     }
-
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
         File scriptFile = new File(parametresBundle.argument().strip());

@@ -21,11 +21,17 @@ public class GroupCountingByCreationDate extends BaseCommand{
                 "группирует элементы по дате создания, выводя их количество");
     }
 
+    /**
+     * @see Command#getRequiredParametres()
+     */
     @Override
     public RequiredParametres getRequiredParametres() {
         return RequiredParametres.COLLECTION_ONLY;
     }
 
+    /**
+     * @see Command#execute(ParametresBundle) ()
+     */
     @Override
     public void execute(ParametresBundle parametresBundle) {
         HashMap<ZonedDateTime,Integer> dates = new HashMap<>();

@@ -3,7 +3,6 @@ import CollectionWrappers.MyCollection;
 import Entities.Flat;
 import Exceptions.EndOfStreamException;
 import Exceptions.FunctionFailedException;
-import Input.BaseInputManager;
 import Input.ConsoleInputManager;
 import Managers.CommandManager;
 import Managers.JsonManager;
@@ -13,8 +12,6 @@ import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.Objects;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
 public class Main {
     /**
      * Точка входа в программу

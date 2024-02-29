@@ -7,7 +7,11 @@ import Managers.CommandManager;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Класс, хранящий в себе все параметры, необходимые для выполнения команды
+ */
 public record ParametresBundle(CollectionManager collectionManager, String argument, InputManager reader, Collection<Command> commands) {
+
     public ParametresBundle(CollectionManager collectionManager) {
         this(collectionManager, null, null,null);
     }

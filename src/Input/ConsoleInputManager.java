@@ -6,14 +6,26 @@ import java.util.InputMismatchException;
 import Entities.*;
 import Exceptions.InvalidInputException;
 
+/**
+ * Класс для управления вводом из консоли
+ * Реализует интерфейс InputManager
+ */
 public class ConsoleInputManager extends BaseInputManager implements InputManager {
 
 
     private static ConsoleInputManager instance;
+
+    /**
+     * Конструктор
+     */
     private ConsoleInputManager() {
         super(System.in);
     }
 
+    /**
+     * Получить экземпляр класса
+     * @return ConsoleInputManager
+     */
     public static ConsoleInputManager getInstance(){
         if (instance==null){
             instance = new ConsoleInputManager();
@@ -24,6 +36,7 @@ public class ConsoleInputManager extends BaseInputManager implements InputManage
     /**
      * Читает координаты из консоли
      * @return Coordinates - прочтенные координаты
+     * @throws InvalidInputException если некорректный ввод
      */
     public Coordinates readCoordinates() throws InvalidInputException{
         try {
@@ -43,6 +56,7 @@ public class ConsoleInputManager extends BaseInputManager implements InputManage
     /**
      * Читает Furnish из консоли
      * @return Furnish - прочтенный Furnish
+     * @throws InvalidInputException если некорректный ввод
      */
     public Furnish readFurnish() throws InvalidInputException{
         try {
@@ -56,6 +70,7 @@ public class ConsoleInputManager extends BaseInputManager implements InputManage
     /**
      * Читает View из консоли
      * @return View - прочтенный View
+     * @throws InvalidInputException если некорректный ввод
      */
     public View readView()throws InvalidInputException{
         try {
@@ -70,6 +85,7 @@ public class ConsoleInputManager extends BaseInputManager implements InputManage
     /**
      * Читает House из консоли в громком режиме
      * @return House - прочтенный House
+     * @throws InvalidInputException если некорректный ввод
      */
     public House readHouse(){
         House object = new House();
@@ -81,8 +97,11 @@ public class ConsoleInputManager extends BaseInputManager implements InputManage
     }
 
 
-
-
+    /**
+     * Читает Transport из консоли
+     * @return Transport - прочтенный Transport
+     * @throws InvalidInputException если некорректный ввод
+     */
     public Transport readTransport() throws InvalidInputException{
         try {
             System.out.print("Введите Transport (NONE, LITTLE, NORMAL, ENOUGH): ");
@@ -93,7 +112,10 @@ public class ConsoleInputManager extends BaseInputManager implements InputManage
     }
 
 
-
+    /**
+     * Читает Flat из консоли
+     * @return Flat - прочтенный Flat
+     */
     public Flat readFlat() {
         Flat object = new Flat();
         this.doUntillCorrect(()->object.setName(this.readLine("Введите Имя: ").strip()),
@@ -112,7 +134,7 @@ public class ConsoleInputManager extends BaseInputManager implements InputManage
 
     /**
      * Выполняет действие пока не будет введено корректное значение
-     * @param runnable - действие
+     * @param runnable действие
      */
     public void doUntillCorrect(Runnable runnable){
         while (true){
@@ -127,7 +149,7 @@ public class ConsoleInputManager extends BaseInputManager implements InputManage
 
     /**
      * Выполняет действия пока не будет введено корректное значение
-     * @param runnables - действия
+     * @param runnables действия
      */
     public void doUntillCorrect(Runnable ... runnables){
         for (Runnable runnable:runnables){
