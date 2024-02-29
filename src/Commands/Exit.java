@@ -14,4 +14,15 @@ public class Exit extends BaseCommand {
     }
 
 
+
+    @Override
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.NOTHING;
+    }
+
+
+    @Override
+    public void execute(ParametresBundle parametresBundle) {
+        //DO NOTHING
+    }
 }

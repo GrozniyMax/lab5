@@ -1,13 +1,9 @@
-package Commands.CommandsWithInput;
-
-import CollectionWrappers.CollectionManager;
-import Commands.BaseCommand;
-import Input.InputManager;
+package Commands;
 
 /**
  * Команда "update". Обновляет данные элемента коллекции по id
  */
-public class Update extends BaseCommand implements CommandWithInput {
+public class Update extends BaseCommand {
     /**
      * Пустой конструктор
      * @see BaseCommand
@@ -18,11 +14,16 @@ public class Update extends BaseCommand implements CommandWithInput {
     }
 
     @Override
-    public void execute(CollectionManager collectionManager, String argument, InputManager inputManager) {
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.ALL;
+    }
+
+    @Override
+    public void execute(ParametresBundle parametresBundle) {
         try {
-            Integer id = Integer.parseInt(argument);
-            collectionManager.getList().set( id,
-                    inputManager.readFlat());
+            Integer id = Integer.parseInt(parametresBundle.argument());
+            parametresBundle.collectionManager().getList().set( id,
+                    parametresBundle.reader().readFlat());
         } catch ( NumberFormatException e){
             throw new IllegalArgumentException("Некорректно введенный id");
         } catch (IndexOutOfBoundsException e) {

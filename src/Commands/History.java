@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 /**
  *  оманда "history" - выводит последние 5 команд
  */
-public class History extends BaseCommand implements CommandWithoutInput{
+public class History extends BaseCommand{
     /**
      * ѕустой конструктор
      * @see BaseCommand
@@ -18,9 +18,13 @@ public class History extends BaseCommand implements CommandWithoutInput{
                 "выводит последние 5 команд");
     }
 
+    @Override
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.COLLECTION_ONLY;
+    }
 
     @Override
-    public void execute(CollectionManager manager, String argument) {
-        manager.getHistory().forEach(System.out::println);
+    public void execute(ParametresBundle parametresBundle) {
+        parametresBundle.collectionManager().getHistory().forEach(System.out::println);
     }
 }

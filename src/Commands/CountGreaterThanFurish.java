@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 /**
  * Команда "count_greater_than_furish"
  */
-public class CountGreaterThanFurish extends BaseCommand implements CommandWithoutInput{
+public class CountGreaterThanFurish extends BaseCommand{
     /**
      * Конструктор команды
      * @see BaseCommand
@@ -21,14 +21,24 @@ public class CountGreaterThanFurish extends BaseCommand implements CommandWithou
     }
 
     @Override
-    public void execute(CollectionManager manager, String argument) {
-        Furnish furish = Furnish.valueOf(argument.toUpperCase());
-        long counter=0;
-        for (Flat f : manager.getList() ) {
-            if (f.getFurnish().compareTo(furish)>0){
-                counter++;
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.ARGUMENT;
+    }
+
+
+    @Override
+    public void execute(ParametresBundle parametresBundle) {
+        try {
+            Furnish furish = Furnish.valueOf(parametresBundle.argument().toUpperCase());
+            long counter=0;
+            for (Flat f : parametresBundle.collectionManager().getList() ) {
+                if (f.getFurnish().compareTo(furish)>0){
+                    counter++;
+                }
             }
+            System.out.println("Количество объектов с таким полем Furish " + counter);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Некорректно введенный аргумент");
         }
-        System.out.println("Количество объектов с таким полем Furish " + counter);
     }
 }

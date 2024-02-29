@@ -2,17 +2,13 @@ package Managers;
 
 import CollectionWrappers.CollectionManager;
 import Commands.*;
-import Commands.CommandsWithInput.Add;
-import Commands.CommandsWithInput.CommandWithInput;
-import Commands.CommandsWithInput.RemoveLower;
-import Commands.CommandsWithInput.Update;
 import Exceptions.EndOfStreamException;
 import Exceptions.FunctionFailedException;
 import Exceptions.InvalidInputException;
 import Input.InputManager;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+
 import java.util.Map;
 
 public class CommandManager {
@@ -81,20 +77,26 @@ public class CommandManager {
             if (currentCommand.getName().equals("exit")){
                 return true;
             }
-            String argument = splitted.length<2?"":splitted[1];
-            if (currentCommand instanceof Help){
-                ((Help) currentCommand).execute(new LinkedList<Command>(commands.values()));
-            }else if (currentCommand instanceof CommandWithoutInput){
-                ((CommandWithoutInput) currentCommand).execute(collectionManager,argument);
-            } else if (currentCommand instanceof CommandWithInput) {
-                ((CommandWithInput) currentCommand).execute(collectionManager,argument,inputManager);
+            ParametresBundle parametresBundle = null;
+            switch (currentCommand.getRequiredParametres()){
+                case ALL -> parametresBundle = new ParametresBundle(collectionManager,
+                            splitted[1],
+                            inputManager);
+                case COMMANDS -> parametresBundle = new ParametresBundle(commands.values());
+                case NOTHING -> parametresBundle = new ParametresBundle();
+                case COLLECTION_ONLY -> parametresBundle = new ParametresBundle(collectionManager);
+                case READER -> parametresBundle = new ParametresBundle(collectionManager,inputManager);
+                case ARGUMENT -> parametresBundle = new ParametresBundle(collectionManager,splitted[1]);
             }
+            currentCommand.execute(parametresBundle);
         } catch (IllegalArgumentException e) {
             throw new FunctionFailedException("Введен некорректный аргумент функции. "+e.getMessage());
         } catch (EndOfStreamException e){
             return true;
         } catch (InvalidInputException e){
             throw new FunctionFailedException("Ошибка ввода"+e.getMessage());
+        }catch (IndexOutOfBoundsException e){
+            throw  new FunctionFailedException("Ошибка ввода. Не введен аргумент функции");
         }
         //TODO Прописать остальные exceptions
 

@@ -3,7 +3,7 @@ package Commands;
 /**
  * Êîìàíäà "info" - âûâîäèò èíôîğìàöèş î êîëëåêöèè
  */
-public class Info extends BaseCommand implements CommandWithoutInput{
+public class Info extends BaseCommand {
     /**
      * Ïóñòîé êîíñòğóêòîğ
      * @see BaseCommand
@@ -12,11 +12,15 @@ public class Info extends BaseCommand implements CommandWithoutInput{
         super("info","âûâîäèò èíôîğìàöèş î êîëëåêöèè");
     }
 
+    @Override
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.COLLECTION_ONLY;
+    }
 
     @Override
-    public void execute(CollectionWrappers.CollectionManager manager, String argument) {
-        System.out.println("ÄÀÒÀ ÑÎÇÄÀÍÈß: "+ manager.getCollection().creationDate.toString());
-        System.out.println("ÒÈÏ ÊÎËËÅÊÖÈÈ: "+manager.getList().getClass().getSimpleName());
-        System.out.println("ÊÎËÈ×ÅÑÒÂÎ İËÅÌÅÍÒÎÂ: "+ manager.getList().size());
+    public void execute(ParametresBundle parametresBundle) {
+        System.out.println("ÄÀÒÀ ÑÎÇÄÀÍÈß: "+ parametresBundle.collectionManager().getCollection().creationDate.toString());
+        System.out.println("ÒÈÏ ÊÎËËÅÊÖÈÈ: "+parametresBundle.collectionManager().getList().getClass().getSimpleName());
+        System.out.println("ÊÎËÈ×ÅÑÒÂÎ İËÅÌÅÍÒÎÂ: "+ parametresBundle.collectionManager().getList().size());
     }
 }

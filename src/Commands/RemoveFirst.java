@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 /**
  * Команда "remove_first". Удаляет первый элемент.
  */
-public class RemoveFirst extends BaseCommand implements CommandWithoutInput{
+public class RemoveFirst extends BaseCommand{
     /**
      * Пустой конструктор
      * @see BaseCommand
@@ -17,11 +17,17 @@ public class RemoveFirst extends BaseCommand implements CommandWithoutInput{
                 "удаляет первый элемент");
     }
 
+
     @Override
-    public void execute(CollectionManager manager, String argument) {
-        manager.getList().remove(0);
-        for (int i = 0; i < manager.getList().size(); i++) {
-            manager.getList().get(i).setId((long) i);
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.COLLECTION_ONLY;
+    }
+
+    @Override
+    public void execute(ParametresBundle parametresBundle) {
+        parametresBundle.collectionManager().getList().remove(0);
+        for (int i = 0; i < parametresBundle.collectionManager().getList().size(); i++) {
+            parametresBundle.collectionManager().getList().get(i).setId((long) i);
         }
     }
 }

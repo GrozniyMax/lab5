@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 /**
  * Команда "remove_by_id". Удаляет элемент из коллекции по его id.
  */
-public class RemoveById extends BaseCommand implements CommandWithoutInput{
+public class RemoveById extends BaseCommand {
     /**
      * Пустой конструктор
      * @see BaseCommand
@@ -17,14 +17,19 @@ public class RemoveById extends BaseCommand implements CommandWithoutInput{
         super("remove_by_id","удаляет объект по id");
     }
 
+    @Override
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.ARGUMENT;
+    }
 
     @Override
-    public void execute(CollectionManager manager, String argument) {
+    public void execute(ParametresBundle parametresBundle) {
+
         try {
-            Integer id = Integer.parseInt(argument.strip());
-            manager.getList().remove(id);
-            for (int i = 0; i < manager.getList().size(); i++) {
-                manager.getList().get(i).setId(Long.valueOf(i));
+            Integer id = Integer.parseInt(parametresBundle.argument().strip());
+            parametresBundle.collectionManager().getList().remove(id);
+            for (int i = 0; i < parametresBundle.collectionManager().getList().size(); i++) {
+                parametresBundle.collectionManager().getList().get(i).setId(Long.valueOf(i));
             }
         } catch (IndexOutOfBoundsException e) {
             throw new IllegalArgumentException("id больше чем количество элементов массива");

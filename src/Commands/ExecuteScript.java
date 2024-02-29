@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 /**
  * Класс команды выполнения скрипта
  */
-public class ExecuteScript extends BaseCommand implements CommandWithoutInput{
+public class ExecuteScript extends BaseCommand{
     static Set<String> executedFiles = new HashSet<>();
 
     /**
@@ -31,9 +31,13 @@ public class ExecuteScript extends BaseCommand implements CommandWithoutInput{
     }
 
     @Override
-    public void execute(CollectionManager manager, String argument) {
-        File scriptFile = new File(argument.strip());
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.ARGUMENT;
+    }
 
+    @Override
+    public void execute(ParametresBundle parametresBundle) {
+        File scriptFile = new File(parametresBundle.argument().strip());
 
         if (executedFiles.contains(scriptFile.getAbsolutePath())){
             System.err.println("Вы создали бесконечную рекурсию. Поэтому выполнение прикращается");
@@ -45,7 +49,7 @@ public class ExecuteScript extends BaseCommand implements CommandWithoutInput{
 
         try {
 
-            scriptCommandManager = new CommandManager(manager,
+            scriptCommandManager = new CommandManager(parametresBundle.collectionManager(),
                     new ScriptInputManager(new FileInputStream(scriptFile)));
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException("Некорректный путь к файлу");

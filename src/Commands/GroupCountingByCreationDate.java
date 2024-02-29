@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 /**
  * Класс команды группировки элементов по дате создания
  */
-public class GroupCountingByCreationDate extends BaseCommand implements CommandWithoutInput{
+public class GroupCountingByCreationDate extends BaseCommand{
     /**
      * Конструктор класса команды
      * @see BaseCommand
@@ -21,12 +21,16 @@ public class GroupCountingByCreationDate extends BaseCommand implements CommandW
                 "группирует элементы по дате создания, выводя их количество");
     }
 
+    @Override
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.COLLECTION_ONLY;
+    }
 
     @Override
-    public void execute(CollectionManager manager, String argument) {
+    public void execute(ParametresBundle parametresBundle) {
         HashMap<ZonedDateTime,Integer> dates = new HashMap<>();
         ZonedDateTime currentDate;
-        for (Flat flat : manager.getList()) {
+        for (Flat flat : parametresBundle.collectionManager().getList()) {
             currentDate = flat.getCreationDate();
             if (dates.containsKey(currentDate)){
                 dates.put(currentDate,dates.get(currentDate)+1);

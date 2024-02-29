@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 /**
  * Команда "remove_all_by_view" удаления всех элементов, значение поля view которых эквивалентно введенному
  */
-public class RemoveAllByView extends BaseCommand implements CommandWithoutInput{
+public class RemoveAllByView extends BaseCommand{
 
     /**
      * Пустой конструктор
@@ -20,14 +20,18 @@ public class RemoveAllByView extends BaseCommand implements CommandWithoutInput{
                 "удаляет все элементы, view оторых совпадает с введенным");
     }
 
+    @Override
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.ARGUMENT;
+    }
 
     @Override
-    public void execute(CollectionManager manager, String argument) {
-        View view = View.valueOf(argument.strip().toUpperCase());
+    public void execute(ParametresBundle parametresBundle) {
+        View view = View.valueOf(parametresBundle.argument().strip().toUpperCase());
 
-        manager.getList().removeIf((Flat colObj)->colObj.getView().equals(view));
-        for (int i = 0; i < manager.getList().size(); i++) {
-            manager.getList().get(i).setId(Long.valueOf(i));
+        parametresBundle.collectionManager().getList().removeIf((Flat colObj)->colObj.getView().equals(view));
+        for (int i = 0; i < parametresBundle.collectionManager().getList().size(); i++) {
+            parametresBundle.collectionManager().getList().get(i).setId(Long.valueOf(i));
         }
     }
 }

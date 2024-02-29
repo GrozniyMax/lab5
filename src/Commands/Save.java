@@ -1,15 +1,15 @@
 package Commands;
 
 import CollectionWrappers.CollectionManager;
-import Input.BaseInputManager;
+
 import Managers.JsonManager;
 
 import java.io.FileNotFoundException;
-import java.util.regex.Matcher;
+
 /**
  * Команда "save" - сохраняет коллекцию в файл
  */
-public class Save extends BaseCommand implements CommandWithoutInput{
+public class Save extends BaseCommand{
     /**
      * Пустой конструктор
      * @see BaseCommand
@@ -19,11 +19,15 @@ public class Save extends BaseCommand implements CommandWithoutInput{
                 "сохраняет коллекцию в файл");
     }
 
+    @Override
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.COLLECTION_ONLY;
+    }
 
     @Override
-    public void execute(CollectionManager manager, String argument) {
+    public void execute(ParametresBundle parametresBundle) {
         try {
-            JsonManager.dump(manager.getCollection());
+            JsonManager.dump(parametresBundle.collectionManager().getCollection());
             System.out.println("Коллекция сохранена");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

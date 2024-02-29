@@ -2,12 +2,11 @@ package Commands;
 
 import CollectionWrappers.CollectionManager;
 
-import java.util.regex.Matcher;
 
 /**
  * Команда очистки коллекции
  */
-public class Clear extends BaseCommand implements CommandWithoutInput{
+public class Clear extends BaseCommand {
     /**
      * Конструктор без параметров
      * @see BaseCommand
@@ -17,9 +16,14 @@ public class Clear extends BaseCommand implements CommandWithoutInput{
                 "очишщает коллекцию");
     }
 
+    @Override
+    public RequiredParametres getRequiredParametres() {
+        return RequiredParametres.COLLECTION_ONLY;
+    }
+
 
     @Override
-    public void execute(CollectionManager manager, String argument) {
-        manager.getList().clear();
+    public void execute(ParametresBundle parametresBundle) {
+        parametresBundle.collectionManager().getList().clear();
     }
 }

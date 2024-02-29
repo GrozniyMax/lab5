@@ -4,7 +4,7 @@ package Commands;
  * Абстрактный класс команды
  * @author Максим Тараненко
  */
-public class BaseCommand implements Command{
+public abstract class BaseCommand implements Command{
     //TODO Переписать команды на самостоятельный парсинг аргумента без RegExp
 
 
