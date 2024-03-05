@@ -114,11 +114,11 @@ public class CommandManager {
         } catch (EndOfStreamException e){
             return true;
         } catch (InvalidInputException e){
-            throw new FunctionFailedException("Ошибка ввода"+e.getMessage());
+            throw new FunctionFailedException("Ошибка ввода. "+e.getMessage());
         }catch (IndexOutOfBoundsException e){
             throw  new FunctionFailedException("Ошибка ввода. Не введен аргумент функции");
         }
-        //TODO Прописать остальные exceptions
+
 
         return false;
 

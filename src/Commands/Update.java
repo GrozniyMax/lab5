@@ -28,12 +28,14 @@ public class Update extends BaseCommand {
     public void execute(ParametresBundle parametresBundle) {
         try {
             Integer id = Integer.parseInt(parametresBundle.argument());
+            if ((id<0)||(id>parametresBundle.collectionManager().getList().size())) throw new IndexOutOfBoundsException();
             parametresBundle.collectionManager().getList().set( id,
                     parametresBundle.reader().readFlat());
         } catch ( NumberFormatException e){
             throw new IllegalArgumentException("Некорректно введенный id");
         } catch (IndexOutOfBoundsException e) {
-            throw new IllegalArgumentException(" Указанный id больше чем количество элементов массива");
+            throw new IllegalArgumentException(" Указанный id вне чем количество элементов массива");
         }
+
     }
 }

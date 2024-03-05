@@ -48,7 +48,7 @@ public class ScriptInputManager extends BaseInputManager implements InputManager
      */
     public Furnish readFurnish() throws InvalidInputException{
         try {
-            return Furnish.valueOf(this.readLine().strip());
+            return Furnish.valueOf(this.readLine().strip().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new InvalidInputException(e.getMessage());
         }
@@ -62,7 +62,7 @@ public class ScriptInputManager extends BaseInputManager implements InputManager
      */
     public View readView() throws InvalidInputException{
         try {
-            return View.valueOf(this.readLine().strip());
+            return View.valueOf(this.readLine().strip().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new InvalidInputException(e.getMessage());
         }
@@ -92,7 +92,7 @@ public class ScriptInputManager extends BaseInputManager implements InputManager
      */
     public Transport readTransport() throws InvalidInputException{
         try {
-            return Transport.valueOf(this.readLine().strip());
+            return Transport.valueOf(this.readLine().strip().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new InvalidInputException(e.getMessage());
         }
@@ -117,6 +117,8 @@ public class ScriptInputManager extends BaseInputManager implements InputManager
             return object;
         } catch (IllegalArgumentException e) {
             throw new InvalidInputException(e.getMessage());
+        } catch (EndOfStreamException e){
+            throw new InvalidInputException("¬вод неокончен");
         }
     }
 

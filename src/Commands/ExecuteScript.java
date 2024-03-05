@@ -65,7 +65,7 @@ public class ExecuteScript extends BaseCommand{
                 exit = scriptCommandManager.handle();
             }catch (FunctionFailedException e){
                 noExceptionsThrown = false;
-                System.err.println(e.getMessage());
+                System.err.println("Ошибка в выполнении скрипта: "+e.getMessage());
                 exit = true;
             }
         }
